@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: changyong
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mirror.ajb.kr:3306/oliveyoung
+    username: "oliveyoung_user"
+    password: "oliv3296"
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      url: https://localhost:9200
+      api-key: TnlTcS1aQUJibmREM2luRFhYMEI6REg4UXFCSDlSR2UzaHpIdFFnRF8zZw==
+      username: elastic
+      password: 000221
+      ssl:
+        verification-mode: full
+        trust-store-type: pkcs12
+        trust-store: classpath:truststore.p12
+        trust-store-password: 000221
+
+
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    defaultModelsExpandDepth: 2
+    defaultModelExpandDepth: 2
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  model-and-view-allowed: true
+  paths-to-match:
+    - /**
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            client:
+              WIRE: trace

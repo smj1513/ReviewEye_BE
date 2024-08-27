@@ -1,14 +1,15 @@
-package spring.changyong.review.domain;
+package spring.changyong.review.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
-import spring.changyong.product.domain.Product;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+import spring.changyong.product.domain.model.Product;
 
 @Entity
 @Table(name = "row_review")
-@Document(indexName = "review")
 @Getter
 @Setter
 public class Review {

@@ -1,4 +1,4 @@
-package spring.changyong.search.service;
+package spring.changyong.search.domain.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import lombok.RequiredArgsConstructor;

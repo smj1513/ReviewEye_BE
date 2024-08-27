@@ -28,13 +28,13 @@ spring:
         enabled: true
       url: https://localhost:9200
       api-key: TnlTcS1aQUJibmREM2luRFhYMEI6REg4UXFCSDlSR2UzaHpIdFFnRF8zZw==
-      username: elastic
-      password: 000221
+      username: "elastic"
+      password: "000221"
       ssl:
         verification-mode: full
         trust-store-type: pkcs12
-        trust-store: classpath:truststore.p12
-        trust-store-password: 000221
+        trust-store: src/main/resources/truststore.p12
+        trust-store-password: "000221"
 
 
 springdoc:
@@ -46,15 +46,17 @@ springdoc:
     display-request-duration: true
     defaultModelsExpandDepth: 2
     defaultModelExpandDepth: 2
+    path: /swagger-ui.html
   api-docs:
     path: /api-docs
   show-actuator: true
+
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
   writer-with-default-pretty-printer: true
   model-and-view-allowed: true
-  paths-to-match:
-    - /**
+
 logging:
   level:
     org:

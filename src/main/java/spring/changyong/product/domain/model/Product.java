@@ -1,16 +1,14 @@
-package spring.changyong.product.domain;
+package spring.changyong.product.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
-import spring.changyong.review.domain.Review;
+import spring.changyong.review.domain.model.Review;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Entity
-@Document(indexName = "product")
 @Table(name = "row_product")
 @Getter
 @Setter
@@ -35,7 +33,7 @@ public class Product {
 
 	private String thumbnail;
 
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.LAZY)
 	private List<Review> reviews;
 
 }

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis_save_con:latest
+    ports:
+      - "6379:6379"
+
+  elasticsearch:
+    image: elastic_save_con:latest
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: kibana_save_con:latest
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch

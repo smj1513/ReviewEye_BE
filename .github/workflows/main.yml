@@ -18,17 +18,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: sudo ./gradlew clean build
+        run: echo ${{ secrets.UBUNTU_PW }} | sudo ./gradlew clean build
 
       - name: Build Docker image
         run: |
-          docker build -t revieweye .  # Docker 이미지 빌드
+          sudo docker build -t revieweye .  # Docker 이미지 빌드
 
       - name: Run Docker container
         run: |
-          docker stop my-spring-boot-app || true  # 기존 컨테이너 중지
-          docker rm my-spring-boot-app || true  # 기존 컨테이너 삭제
-          docker run -d --name revieweye-spring-app -p 8080:8080 revieweye-spring-app  # 새로운 컨테이너 실행
+          sudo docker stop my-spring-boot-app || true  # 기존 컨테이너 중지
+          sudo docker rm my-spring-boot-app || true  # 기존 컨테이너 삭제
+          sudo docker run -d --name revieweye-spring-app -p 8080:8080 revieweye-spring-app  # 새로운 컨테이너 실행
 
       - name: Clean up
         run: docker system prune -f  # 사용하지 않는 Docker 자원 정리

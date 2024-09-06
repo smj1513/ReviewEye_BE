@@ -22,7 +22,7 @@ public class ReviewDocument {
 
 	private String review;
 
-	private String star;
+	private Long star;
 
 	private String date;
 
@@ -32,9 +32,9 @@ public class ReviewDocument {
 
 	private String photo_list;
 
-	private String recommend;
+	private Long recommend;
 
-	private String usefulPoint;
+	private Double usefulPoint;
 
 	public static ReviewDocument from(Review review){
 		ReviewDocument reviewDocument = new ReviewDocument();

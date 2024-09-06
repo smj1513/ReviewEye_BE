@@ -12,7 +12,7 @@ jobs:
       - run: docker compose up -d
       - uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
+          distribution: 'graalvm'
           java-version: '21'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

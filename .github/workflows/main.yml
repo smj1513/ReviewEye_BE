@@ -2,6 +2,7 @@ name: CICD
 
 on: 
   push:
+    workflow_dispatch: 
     branches:
       - main
 
@@ -10,12 +11,24 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - run: docker compose up -d
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
-          distribution: 'graalvm'
+          distribution: zulu
           java-version: '21'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: sudo ./gradlew clean build --no-daemon
+
+      - name: Build Docker image
+        run: |
+          docker build -t revieweye .  # Docker 이미지 빌드
+
+      - name: Run Docker container
+        run: |
+          docker stop my-spring-boot-app || true  # 기존 컨테이너 중지
+          docker rm my-spring-boot-app || true  # 기존 컨테이너 삭제
+          docker run -d --name revieweye-spring-app -p 8080:8080 revieweye-spring-app  # 새로운 컨테이너 실행
+
+      - name: Clean up
+        run: docker system prune -f  # 사용하지 않는 Docker 자원 정리

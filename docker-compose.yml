@@ -9,16 +9,20 @@ services:
 
   elasticsearch:
     restart: always
-    image: elastic_save_con:latest
+    container_name: elastic
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     environment:
       - discovery.type=single-node
     ports:
       - "9200:9200"
-
+      
   kibana:
     restart: always
-    image: kibana_save_con:latest
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.13.4
     ports:
       - "5601:5601"
+    environment:
+      - SERVER_HOST=0.0.0.0
     depends_on:
       - elasticsearch

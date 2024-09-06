@@ -14,7 +14,7 @@ jobs:
         with:
           repository: smj1513/cangyoung_BE
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SYNC_TOKEN }}
 
       - name: Sync to fork
         run: |

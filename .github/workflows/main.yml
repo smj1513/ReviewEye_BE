@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - run: docker compose up -d
+      - run: sudo docker compose up -d
       - uses: actions/setup-java@v3
         with:
           distribution: 'graalvm'
@@ -19,4 +19,4 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: sudo ./gradlew clean build

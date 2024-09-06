@@ -2,6 +2,7 @@ name: CICD
 
 on: 
   push:
+    workflow_dispatch: 
     branches:
       - main
 

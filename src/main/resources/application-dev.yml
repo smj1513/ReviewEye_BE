@@ -26,14 +26,14 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      url: https://localhost:9200
-      api-key: TnlTcS1aQUJibmREM2luRFhYMEI6REg4UXFCSDlSR2UzaHpIdFFnRF8zZw==
+      url: elastic.ajb.kr:443
+      api-key: MU53UHVKRUJ1R2VxVjBDb0NCVkI6OVRXTWJmcWpUZE9JVm10Tnhvb0NvQQ==
       username: "elastic"
-      password: "000221"
+      password: "032621"
       ssl:
         verification-mode: full
         trust-store-type: pkcs12
-        trust-store: src/main/resources/truststore.p12
+        trust-store: src/main/resources/cert_key.p12
         trust-store-password: "000221"
 
 

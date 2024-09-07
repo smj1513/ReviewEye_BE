@@ -57,5 +57,13 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
 jar.enabled = false
 bootJar.archiveFileName = 'reviewEye.jar'

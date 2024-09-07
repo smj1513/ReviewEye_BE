@@ -33,4 +33,4 @@ jobs:
           name: revieweye
       - name: Execute remote commands
         run: |
-          nohup java -jar build/libs/*.jar & > ~/revieweye/spring-log/nohup.log 2>&1 &
+          nohup java -jar build/libs/*.jar & > ~/revieweye/spring-log/nohup.log 2>&1 & -d

@@ -32,7 +32,7 @@ jobs:
         with:
           name: revieweye
       - name: SCP transfer
-        run: scp *.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/cicd
+        run: scp *.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} -p 22000:~/cicd
       - name: Execute remote commands
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "sudo fuser -k 8080/tcp"

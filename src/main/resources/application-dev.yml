@@ -65,3 +65,4 @@ logging:
           elasticsearch:
             client:
               WIRE: trace
+    root: debug

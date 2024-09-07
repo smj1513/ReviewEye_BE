@@ -5,6 +5,8 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.elasticsearch.client.RestClientBuilder.HttpClientConfigCallback;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
@@ -30,10 +32,10 @@ public class HttpClientConfigImpl implements HttpClientConfigCallback {
 	@Override
 	public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
 		try {
-			File trustLocationFile = new File(trustStore);
+			Resource resource = new ClassPathResource("cert_key.p12");
 			SSLContextBuilder sslContextBuilder = SSLContexts.custom()
 					//	.loadTrustMaterial((chain, authType) -> true); // 모든 인증서를 신뢰합니다.
-					.loadTrustMaterial(trustLocationFile, trustStorePassword.toCharArray());
+					.loadTrustMaterial(resource.getFile(), trustStorePassword.toCharArray());
 			SSLContext sslContext = sslContextBuilder.build();
 			httpAsyncClientBuilder.setSSLContext(sslContext);
 		} catch (IOException | GeneralSecurityException e) {

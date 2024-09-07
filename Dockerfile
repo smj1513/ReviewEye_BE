@@ -5,7 +5,7 @@ FROM azul/zulu-openjdk:21
 WORKDIR /app
 
 # Copy the jar file from the target directory
-COPY target/changyoung.jar revieweye.jar
+COPY build/libs/revieweye.jar revieweye.jar
 
 # Run the jar file
 ENTRYPOINT ["java", "-jar", "app.jar"]

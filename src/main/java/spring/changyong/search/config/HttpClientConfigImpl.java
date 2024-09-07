@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 
 @Component
 public class HttpClientConfigImpl implements HttpClientConfigCallback {
@@ -33,9 +35,13 @@ public class HttpClientConfigImpl implements HttpClientConfigCallback {
 	public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
 		try {
 			Resource resource = new ClassPathResource("cert_key.p12");
+			KeyStore trustStore = KeyStore.getInstance("pkcs12");
+			try (InputStream inputStream = resource.getInputStream()) {
+				trustStore.load(inputStream, trustStorePassword.toCharArray());
+			}
+
 			SSLContextBuilder sslContextBuilder = SSLContexts.custom()
-					//	.loadTrustMaterial((chain, authType) -> true); // 모든 인증서를 신뢰합니다.
-					.loadTrustMaterial(resource.getFile(), trustStorePassword.toCharArray());
+					.loadTrustMaterial(trustStore, null);
 			SSLContext sslContext = sslContextBuilder.build();
 			httpAsyncClientBuilder.setSSLContext(sslContext);
 		} catch (IOException | GeneralSecurityException e) {

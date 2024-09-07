@@ -40,7 +40,10 @@ jobs:
         run: |
           mkdir -p ~/revieweye/source
           cp -R ./ ~/revieweye/source
-        
+
+      - name: docker test
+        run: |
+          docker ps -a || true
       
       - name: Start Spring Boot application
         run: |

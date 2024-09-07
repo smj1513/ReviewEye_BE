@@ -32,7 +32,7 @@ jobs:
             echo "Stopping existing application (PID: $pid)"
             kill $pid
           fi
-      - name: Remove old server in ~/soruce (ignore error)
+      - name: Remove old server in ~/source (ignore error)
         run: |
           rm -rf ~/revieweye/source || true
 
@@ -45,9 +45,9 @@ jobs:
       - name: Start Spring Boot application
         run: |
           nohup java -jar ~/revieweye/source/build/libs/reviewEye.jar > ~/revieweye/source/nohup.out 2>&1 &
-          disown
           sleep 10  # 애플리케이션이 시작될 때까지 대기
           cat ~/revieweye/source/nohup.out  # 로그 출력
+          disown
 
 
           

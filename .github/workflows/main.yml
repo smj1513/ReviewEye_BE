@@ -29,20 +29,20 @@ jobs:
         
       - name: Stop existing application
         run: |
-          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker ps -q --filter "name=revieweye" | xargs -r docker stop
-          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker ps -aq --filter "name=revieweye" | xargs -r docker rm
+          docker ps -q --filter "name=revieweye" | xargs -r docker stop
+          docker ps -aq --filter "name=revieweye" | xargs -r docker rm
 
       - name: Build Docker image
         run: |
-          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker build -t revieweye:latest .
+          docker build -t revieweye:latest .
 
       - name: Run Docker container
         run: |
-          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker run -d --name revieweye -p 8080:8080 revieweye:latest
+          docker run -d --name revieweye -p 8080:8080 revieweye:latest
 
       - name: Check application logs
         run: |
-          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker logs revieweye
+          docker logs revieweye
   
 #  deploy:
 #    needs: build

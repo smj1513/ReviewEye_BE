@@ -65,5 +65,9 @@ sourceSets {
     }
 }
 
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 jar.enabled = false
 bootJar.archiveFileName = 'reviewEye.jar'

@@ -23,7 +23,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Run Jar
-        run: nohup java -jar build/libs/*.jar &
+        run: nohup java -jar build/libs/*.jar > ~/revieweye/spring-log/nohup.log 2>&1 &
 #      - name: Upload artifact
 #        uses: actions/upload-artifact@v3
 #        with:

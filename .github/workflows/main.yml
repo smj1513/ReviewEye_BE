@@ -25,7 +25,8 @@ jobs:
     steps:
       - name: Check Docker version
         run: |
-          echo '${{secrets.UBUNTU_PW}}' | sudo -S docker --version
+          sudo docker --version
+          ${{secrets.UBUNTU_PW}}
         
       - name: Stop existing application
         run: |

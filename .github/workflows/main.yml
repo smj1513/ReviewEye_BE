@@ -32,6 +32,10 @@ jobs:
           docker ps -q --filter "name=revieweye" | xargs -r docker stop
           docker ps -aq --filter "name=revieweye" | xargs -r docker rm
 
+      - name: Remove old Docker image
+        run: |
+          docker rmi revieweye:latest || true  # 이미지가 없을 경우 오류를 무시
+          
       - name: Build Docker image
         run: |
           docker build -t revieweye:latest .

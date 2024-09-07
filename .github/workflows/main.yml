@@ -43,7 +43,7 @@ jobs:
 
       - name: docker test
         run: |
-         echo '3296' | sudo docker ps -a || true
+         echo '3296' | sudo -S docker ps -a || true
       
       - name: Start Spring Boot application
         run: |

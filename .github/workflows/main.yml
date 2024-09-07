@@ -19,11 +19,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
       - name: Build Docker image
-        run: docker build -t revieweye:latest .
+        run: |
+          sudo docker build -t revieweye:latest .
       - name: Run Docker container
         run: |
-          docker stop revieweye-spring-app || true
-          docker rm revieweye-spring-app || true
-          docker run -d --name revieweye-spring-app -p 8080:8080 revieweye:latest
+          sudo docker stop revieweye-spring-app || true
+          sudo docker rm revieweye-spring-app || true
+          sudo docker run -d --name revieweye-spring-app -p 8080:8080 revieweye:latest
       - name: Clean up
         run: docker system prune -f

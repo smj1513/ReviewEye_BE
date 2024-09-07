@@ -22,8 +22,30 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Run Jar
-        run: nohup java -jar build/libs/*.jar > ~/revieweye/spring-log/nohup.log 2>&1 &
+      - name: Stop existing application
+        run: |
+          pid=$(ps aux | grep 'changyong.jar' | grep -v grep | awk '{print $2}')
+          if [ -n "$pid" ]; then
+            echo "Stopping existing application (PID: $pid)"
+            kill $pid
+          fi
+
+      - name: Start Spring Boot application
+        run: |
+          nohup java -jar build/libs/changyong.jar > ~/revieweye/spring-log/app.log 2>&1 &
+          echo $! > ./pid.file
+          echo "Application started with PID $(cat ./pid.file)"
+
+      - name: Check application health
+        run: |
+          sleep 30
+          response=$(curl -sS http://localhost:8080/actuator/health)
+          if [[ $response == *"UP"* ]]; then
+            echo "Application is healthy"
+          else
+            echo "Application health check failed"
+            exit 1
+          fi
 #      - name: Upload artifact
 #        uses: actions/upload-artifact@v3
 #        with:

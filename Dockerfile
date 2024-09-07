@@ -8,4 +8,4 @@ WORKDIR /app
 COPY build/libs/reviewEye.jar revieweye.jar
 
 # Run the jar file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "revieweye.jar"]

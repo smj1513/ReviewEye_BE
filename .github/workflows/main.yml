@@ -18,14 +18,17 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew clean build
-      - name: Build Docker image
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: cicdsample
+      - name: SCP transfer
+        run: scp *.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/cicd
+      - name: Execute remote commands
         run: |
-          docker build -t revieweye:latest .
-      - name: Run Docker container
-        run: |
-          docker stop revieweye-spring-app || true
-          docker rm revieweye-spring-app || true
-          docker run -d --name revieweye-spring-app -p 8080:8080 revieweye:latest
-      - name: Clean up
-        run: |
-          docker system prune -f
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "sudo fuser -k 8080/tcp"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "sudo nohup java -jar ~/cicd/*.jar &"

@@ -27,3 +27,4 @@ jobs:
           sudo docker run -d --name revieweye-spring-app -p 8080:8080 revieweye:latest
       - name: Clean up
         run: sudo docker system prune -f
+

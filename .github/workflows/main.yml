@@ -35,7 +35,7 @@ jobs:
           
       - name: Start Spring Boot application
         run: |
-          nohup -dmS spring java -jar build/libs/reviewEye.jar --server.port=8080 > ~/revieweye/spring-log/nohup.out 2>&1 &
+          nohup java -jar build/libs/reviewEye.jar --server.port=8080 > ~/revieweye/spring-log/nohup.out 2>&1 &
           sleep 10  # 애플리케이션이 시작될 때까지 대기
           cat ~/revieweye/spring-log/nohup.out  # 로그 출력
 

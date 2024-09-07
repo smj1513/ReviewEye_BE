@@ -32,13 +32,10 @@ jobs:
             echo "Stopping existing application (PID: $pid)"
             kill $pid
           fi
-
-      - name: cp JAR
-        run: cp build/libs/reviewEye.jar ~/revieweye/reviewEye.jar
-
+          
       - name: Start Spring Boot application
         run: |
-          screen -dmS spring java -jar ~/revieweye/reviewEye.jar --server.port=8080
+          screen -dmS spring java -jar build/libs/reviewEye.jar --server.port=8080
           sleep 10  # 애플리케이션이 시작될 때까지 대기
           screen -r spring  # 로그 출력
 

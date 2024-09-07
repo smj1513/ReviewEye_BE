@@ -25,24 +25,24 @@ jobs:
     steps:
       - name: Check Docker version
         run: |
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker --version
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker --version
         
       - name: Stop existing application
         run: |
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker ps -q --filter "name=revieweye" | xargs -r docker stop
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker ps -aq --filter "name=revieweye" | xargs -r docker rm
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker ps -q --filter "name=revieweye" | xargs -r docker stop
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker ps -aq --filter "name=revieweye" | xargs -r docker rm
 
       - name: Build Docker image
         run: |
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker build -t revieweye:latest .
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker build -t revieweye:latest .
 
       - name: Run Docker container
         run: |
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker run -d --name revieweye -p 8080:8080 revieweye:latest
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker run -d --name revieweye -p 8080:8080 revieweye:latest
 
       - name: Check application logs
         run: |
-          echo ${{ secret.UBUNTU_PW }} | sudo -S docker logs revieweye
+          echo ${{ secrets.UBUNTU_PW }} | sudo -S docker logs revieweye
   
 #  deploy:
 #    needs: build

@@ -10,7 +10,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -18,12 +17,6 @@ import java.security.KeyStore;
 
 @Component
 public class HttpClientConfigImpl implements HttpClientConfigCallback {
-
-	@Value("${spring.data.elasticsearch.username}")
-	private String username;
-
-	@Value("${spring.data.elasticsearch.password}")
-	private String password;
 
 	@Value("${spring.data.elasticsearch.ssl.trust-store}")
 	private String trustStore;
@@ -34,7 +27,7 @@ public class HttpClientConfigImpl implements HttpClientConfigCallback {
 	@Override
 	public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
 		try {
-			Resource resource = new ClassPathResource("cert_key.p12");
+			Resource resource = new ClassPathResource(trustStore);
 			KeyStore trustStore = KeyStore.getInstance("pkcs12");
 			try (InputStream inputStream = resource.getInputStream()) {
 				trustStore.load(inputStream, trustStorePassword.toCharArray());

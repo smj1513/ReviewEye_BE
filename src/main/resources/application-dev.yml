@@ -33,7 +33,7 @@ spring:
       ssl:
         verification-mode: full
         trust-store-type: pkcs12
-        trust-store: classpath:cert_key.p12
+        trust-store: cert_key.p12
         trust-store-password: "000221"
 
 

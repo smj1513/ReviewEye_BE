@@ -22,10 +22,13 @@ public class SearchAppService {
 		return result.map(productDocument -> SearchResponse.Product.builder()
 				.id(productDocument.getId())
 				.name(productDocument.getName())
+				.price(productDocument.getPrice())
+				.discountPrice(productDocument.getDiscountPrice())
+				.imageUrl(productDocument.getThumbnail())
 				.build());
 	}
 
-	public Page<SearchResponse.Product> productSearchByName(String name, int page, int size) {
+	public Slice<SearchResponse.Product> productSearchByName(String name, int page, int size) {
 		return null;
 	}
 }

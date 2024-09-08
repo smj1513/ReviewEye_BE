@@ -8,24 +8,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import spring.changyong.common.api.code.SuccessCode;
 import spring.changyong.common.api.response.CommonResponse;
+import spring.changyong.docs.controller.SearchDocsController;
 import spring.changyong.search.api.response.SearchResponse;
 import spring.changyong.search.application.SearchAppService;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchController {
+public class SearchController implements SearchDocsController {
 
 	private final SearchAppService searchService;
 
 	@GetMapping("/product/keyword/search")
-	public CommonResponse<Slice<SearchResponse.Product>> productSearch(@RequestParam String keyword,
-	                                                                   @RequestParam(defaultValue = "0") int page,
-	                                                                   @RequestParam(defaultValue = "10") int size) {
+	public CommonResponse<Slice<SearchResponse.Product>> productSearchByKeyword(@RequestParam String keyword,
+	                                                                            @RequestParam(defaultValue = "0") int page,
+	                                                                            @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearch(keyword, page, size));
 	}
 
 	@GetMapping("/product/name/search")
-	public CommonResponse<Page<SearchResponse.Product>> productSearchByName(@RequestParam String name,
+	public CommonResponse<Slice<SearchResponse.Product>> productSearchByName(@RequestParam String name,
 	                                                                   @RequestParam(defaultValue = "0") int page,
 	                                                                   @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearchByName(name, page, size));

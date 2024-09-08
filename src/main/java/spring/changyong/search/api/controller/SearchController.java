@@ -2,6 +2,7 @@ package spring.changyong.search.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +17,17 @@ public class SearchController {
 
 	private final SearchAppService searchService;
 
-	@GetMapping("/product/search")
-	public CommonResponse<Page<SearchResponse.Product>> productSearch(@RequestParam String keyword,
-	                                                                  @RequestParam(defaultValue = "0") int page,
-	                                                                  @RequestParam(defaultValue = "10") int size) {
+	@GetMapping("/product/keyword/search")
+	public CommonResponse<Slice<SearchResponse.Product>> productSearch(@RequestParam String keyword,
+	                                                                   @RequestParam(defaultValue = "0") int page,
+	                                                                   @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearch(keyword, page, size));
+	}
+
+	@GetMapping("/product/name/search")
+	public CommonResponse<Page<SearchResponse.Product>> productSearchByName(@RequestParam String name,
+	                                                                   @RequestParam(defaultValue = "0") int page,
+	                                                                   @RequestParam(defaultValue = "10") int size) {
+		return CommonResponse.success(SuccessCode.OK, searchService.productSearchByName(name, page, size));
 	}
 }

@@ -37,6 +37,8 @@ public class ProductDocument {
 
 	private String thumbnail;
 
+	private Integer discountPrice;
+
 	@Field(type = FieldType.Nested)
 	private List<ReviewDocument> reviews;
 

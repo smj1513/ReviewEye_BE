@@ -1,9 +1,12 @@
 package spring.changyong.product.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 public class ProductResponse {
 
@@ -13,14 +16,24 @@ public class ProductResponse {
 	@NoArgsConstructor
 	public static class Detail {
 
+		@Schema(description = "상품 ID", example = "1")
 		private String id;
-		private String title;
-		private String brand;
-		private String productId;
-		private String thumbnail;
-		private String keyword1;
-		private String keyword2;
 
+		@Schema(description = "상품명", example = "아이폰 12")
+		private String title;
+
+		@Schema(description = "브랜드", example = "Apple")
+		private String brand;
+
+		@Schema(description = "가격", example = "1,000,000")
+		private String productId;
+
+
+		@Schema(description = "상품 이미지 URL", example = "http://image.com")
+		private String thumbnail;
+
+		@Schema(description = "키워드", example = "['keyword1', 'keyword2']")
+		private List<String> keywords;
 
 	}
 
@@ -29,11 +42,9 @@ public class ProductResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class PositiveKeyword {
-		private String keyword1;
-		private String keyword2;
-		private String keyword3;
-		private String keyword4;
-		private String keyword5;
+
+		@Schema(description = "긍정 키워드", example = "['keyword1', 'keyword2']")
+		private List<String> keywords;
 	}
 
 	@Data
@@ -41,10 +52,8 @@ public class ProductResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class NegativeKeyword {
-		private String keyword1;
-		private String keyword2;
-		private String keyword3;
-		private String keyword4;
-		private String keyword5;
+
+		@Schema(description = "부정 키워드", example = "['keyword1', 'keyword2']")
+		private List<String> keywords;
 	}
 }

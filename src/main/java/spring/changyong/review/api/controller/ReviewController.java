@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import spring.changyong.common.api.code.SuccessCode;
 import spring.changyong.common.api.response.CommonResponse;
+import spring.changyong.docs.controller.ReviewDocsController;
 import spring.changyong.review.api.response.ReviewResponse;
 import spring.changyong.review.application.ReviewAppService;
 
 @RestController
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewController implements ReviewDocsController {
 
 	private final ReviewAppService reviewAppService;
 

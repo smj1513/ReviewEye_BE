@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.changyong.common.api.code.SuccessCode;
 import spring.changyong.common.api.response.CommonResponse;
+import spring.changyong.docs.controller.ProductDocsController;
 import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.product.application.ProductAppService;
 
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductController implements ProductDocsController {
 	private final ProductAppService productAppService;
 
 	@GetMapping("/{id}/detail")

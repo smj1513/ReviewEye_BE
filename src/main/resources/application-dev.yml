@@ -57,11 +57,23 @@ springdoc:
   writer-with-default-pretty-printer: true
   model-and-view-allowed: true
 
+
+
 logging:
   level:
     org:
+      elasticsearch:
+        client:
+          RestClient: debug
       springframework:
         data:
           elasticsearch:
+            core: debug
             client:
-              WIRE: trace
+              WIRE: debug
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

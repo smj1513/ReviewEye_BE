@@ -20,7 +20,7 @@ public class ProductDocument {
 	@Id
 	private Long id;
 
-	@Column(name = "product_id")
+	@Field(name = "product_id")
 	private String productId;
 
 	private String name;
@@ -37,6 +37,7 @@ public class ProductDocument {
 
 	private String thumbnail;
 
+	@Field(name = "discount_price")
 	private Integer discountPrice;
 
 	@Field(type = FieldType.Nested)

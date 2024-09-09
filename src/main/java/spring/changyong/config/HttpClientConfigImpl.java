@@ -1,4 +1,4 @@
-package spring.changyong.search.config;
+package spring.changyong.config;
 
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;

@@ -1,4 +1,4 @@
-package spring.changyong.search.config;
+package spring.changyong.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,18 +14,16 @@ import org.springframework.data.elasticsearch.support.HttpHeaders;
 @RequiredArgsConstructor
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
+	private final HttpClientConfigImpl httpClientConfigCallback;
 	@Value("${spring.data.elasticsearch.url}")
 	private String url;
 	@Value("${spring.data.elasticsearch.api-key}")
 	private String apiKey;
-
 	@Value("${spring.data.elasticsearch.username}")
 	private String username;
-
 	@Value("${spring.data.elasticsearch.password}")
 	private String password;
 
-	private final HttpClientConfigImpl httpClientConfigCallback;
 	@Override
 	public ClientConfiguration clientConfiguration() {
 		HttpHeaders headers = new HttpHeaders();
@@ -34,7 +32,7 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 				.connectedTo(url)
 				.usingSsl()
 				.withHeaders(() -> headers)
-				.withBasicAuth(username,password)
+				.withBasicAuth(username, password)
 				.withClientConfigurer(ElasticsearchClients
 						.ElasticsearchRestClientConfigurationCallback
 						.from(restClientBuilder ->

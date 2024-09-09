@@ -17,14 +17,14 @@ public class SearchController implements SearchDocsController {
 
 	private final SearchAppService searchService;
 
-	@GetMapping("/product/keyword/search")
+	@GetMapping("/products/keyword/search")
 	public CommonResponse<Slice<SearchResponse.Product>> productSearchByKeyword(@RequestParam String keyword,
 	                                                                            @RequestParam(defaultValue = "0") int page,
 	                                                                            @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearchByKeyword(keyword, page, size));
 	}
 
-	@GetMapping("/product/name/search")
+	@GetMapping("/products/name/search")
 	public CommonResponse<Slice<SearchResponse.Product>> productSearchByName(@RequestParam String name,
 	                                                                   @RequestParam(defaultValue = "0") int page,
 	                                                                   @RequestParam(defaultValue = "10") int size) {

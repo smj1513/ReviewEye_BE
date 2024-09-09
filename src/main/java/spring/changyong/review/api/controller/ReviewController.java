@@ -20,7 +20,7 @@ public class ReviewController implements ReviewDocsController {
 
 	private final ReviewAppService reviewAppService;
 
-	@GetMapping("/product/{id}/review")
+	@GetMapping("/products/{id}/reviews")
 	public CommonResponse<Slice<ReviewResponse.Result>> getProductReview(@PathVariable Integer id,
 	                                                                     @RequestParam(defaultValue = "0") int page,
 	                                                                     @RequestParam(defaultValue = "10") int size)

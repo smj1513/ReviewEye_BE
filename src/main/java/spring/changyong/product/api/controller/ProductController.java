@@ -12,7 +12,7 @@ import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.product.application.ProductAppService;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController implements ProductDocsController {
 	private final ProductAppService productAppService;
@@ -22,11 +22,11 @@ public class ProductController implements ProductDocsController {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getProductDetail(id));
 	}
 
-	@GetMapping("/{id}/positive-keyword")
+	@GetMapping("/{id}/positive-keywords")
 	public CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(@PathVariable Integer id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getPositiveKeyword(id));
 	}
-	@GetMapping("/{id}/negative-keyword")
+	@GetMapping("/{id}/negative-keywords")
 	public CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(@PathVariable Integer id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getNegativeKeyword(id));
 	}

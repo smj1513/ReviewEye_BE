@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 import spring.changyong.product.domain.model.Product;
 import spring.changyong.review.domain.model.Review;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Document(indexName = "product")
+@Setting(settingPath = "elasticsearch/product-settings.json")
 @Getter
 @Setter
 public class ProductDocument {

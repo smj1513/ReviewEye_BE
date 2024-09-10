@@ -14,6 +14,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
+      - name: Docker Compose Start
+        run: |
+          docker-compose start
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
@@ -26,7 +29,7 @@ jobs:
       - name: Check Docker version
         run: |
           docker --version
-        
+          
       - name: Stop existing application
         run: |
           docker ps -q --filter "name=revieweye" | xargs -r docker stop
@@ -42,7 +45,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d --name revieweye -p 8080:8080 revieweye:latest
+          docker run -d --restart=always --name revieweye -p 8080:8080 revieweye:latest
 
       - name: Check application logs
         run: |

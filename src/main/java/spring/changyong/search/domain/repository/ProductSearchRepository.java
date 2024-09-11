@@ -9,5 +9,4 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.persistence.repository.CustomProductSearchRepository;
 
 public interface ProductSearchRepository extends CustomProductSearchRepository, ElasticsearchRepository<ProductDocument, Long> {
-	Page<ProductDocument> searchByName(String name, Pageable pageable);
 }

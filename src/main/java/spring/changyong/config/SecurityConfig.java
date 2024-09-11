@@ -1,4 +1,4 @@
-package spring.changyong.security.config;
+package spring.changyong.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

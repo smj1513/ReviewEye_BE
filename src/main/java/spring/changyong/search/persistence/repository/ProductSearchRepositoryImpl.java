@@ -9,12 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHitSupport;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.data.elasticsearch.core.*;
 import org.springframework.stereotype.Repository;
+import spring.changyong.search.api.response.SearchResponse;
 import spring.changyong.search.domain.model.ProductDocument;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Log4j2
@@ -34,7 +35,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 						.match()
 						.field("name")
 						.query(name)
-						.analyzer("nori_analyzer")
+						.analyzer("nori_analyzer") //노리 형태소 분석기 사용
 						.fuzziness("2")
 						.boost(2F)
 						.autoGenerateSynonymsPhraseQuery(true)
@@ -47,8 +48,17 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 
 		SearchHits<ProductDocument> result = elasticsearchOperations
 				.search(query, ProductDocument.class);
+
+
 		SearchPage<ProductDocument> searchHits = SearchHitSupport.searchPageFor(result, pageable);
-		searchHits.getSearchHits().getSearchHits().forEach(searchHit -> log.info("searchHit: {} \n, score:{}", searchHit.getContent().getName(), searchHit.getScore()));
+
+		List<SearchResponse.Product> list = searchHits.getSearchHits().stream().map(SearchResponse.Product::from).toList();
+
+		searchHits.getSearchHits()
+				.getSearchHits()
+				.forEach(searchHit -> log.info("searchHit: {} \n, score:{}", searchHit.getContent().getName(), searchHit.getScore()));
+
+
 		return (Page<ProductDocument>) SearchHitSupport.unwrapSearchHits(searchHits);
 	}
 }

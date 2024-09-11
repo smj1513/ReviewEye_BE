@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.document.SearchDocument;
+import spring.changyong.search.domain.model.ProductDocument;
 
 import java.util.List;
 
@@ -28,5 +31,20 @@ public class SearchResponse {
 		@Schema(description = "썸네일 이미지", example = "http://image.com")
 		private String imageUrl;
 		private List<String> keywords;
+
+		@Schema(description = "검색결과의 관련성 점수", example = "4.8")
+		private Float score;
+
+		public static SearchResponse.Product from(SearchHit<ProductDocument> searchHit){
+			return Product
+					.builder()
+					.name(searchHit.getContent().getName())
+					.imageUrl(searchHit.getContent().getThumbnail())
+					.price(searchHit.getContent().getPrice())
+					.discountPrice(searchHit.getContent().getDiscountPrice())
+					.id(searchHit.getContent().getId())
+					.score(searchHit.getScore())
+					.build();
+		}
 	}
 }

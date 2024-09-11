@@ -17,8 +17,6 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 	private final HttpClientConfigImpl httpClientConfigCallback;
 	@Value("${spring.data.elasticsearch.url}")
 	private String url;
-	@Value("${spring.data.elasticsearch.api-key}")
-	private String apiKey;
 	@Value("${spring.data.elasticsearch.username}")
 	private String username;
 	@Value("${spring.data.elasticsearch.password}")
@@ -26,12 +24,9 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
 	@Override
 	public ClientConfiguration clientConfiguration() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "ApiKey " + apiKey);
 		return ClientConfiguration.builder()
 				.connectedTo(url)
 				.usingSsl()
-				.withHeaders(() -> headers)
 				.withBasicAuth(username, password)
 				.withClientConfigurer(ElasticsearchClients
 						.ElasticsearchRestClientConfigurationCallback
@@ -40,36 +35,4 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 				).build();
 
 	}
-
-
-//	@Value("${spring.data.elasticsearch.username}")
-//	private String username;
-//	@Value("${spring.data.elasticsearch.password}")
-//	private String password;
-
-//	@Bean
-//	public RestClient restClient() {
-//		return RestClient.builder(HttpHost.create(url))
-//				.setDefaultHeaders(new Header[]{
-//						new BasicHeader("Authorization", "ApiKey " + apiKey)
-//				})
-//				.build();
-//	}
-
-//
-//	@Bean
-//	public ElasticsearchTransport elasticsearchTransport() {
-//		return new RestClientTransport(restClient(), new JacksonJsonpMapper());
-//	}
-//
-//	@Bean
-//	public ElasticsearchClient elasticsearchClient() {
-//		return new ElasticsearchClient(elasticsearchTransport());
-//	}
-//
-//	@Bean
-//	public ElasticsearchOperations elasticsearchOperations() {
-//		return new ElasticsearchTemplate(elasticsearchClient());
-//	}
-
 }

@@ -22,6 +22,7 @@ public interface SearchDocsController {
 			@RequestParam(defaultValue = "0") int page,
 			@Parameter(description = "페이지 크기")
 			@RequestParam(defaultValue = "10") int size);
+
 	@Operation(summary = "상품명 기반 상품 검색", description = "상품명 기반 상품 검색")
 	@ApiResponse(responseCode = "200", description = "성공")
 	CommonResponse<Slice<SearchResponse.Product>> productSearchByName(

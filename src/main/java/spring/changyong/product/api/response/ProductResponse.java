@@ -14,6 +14,7 @@ public class ProductResponse {
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor
+	@Schema(title = "상품 상세 정보 조회 응답")
 	public static class Detail {
 
 		@Schema(description = "상품 ID", example = "1")
@@ -41,6 +42,7 @@ public class ProductResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@Schema(title = "상품 긍정 키워드 조회 응답")
 	public static class PositiveKeyword {
 
 		@Schema(description = "긍정 키워드", example = "['keyword1', 'keyword2']")
@@ -51,6 +53,7 @@ public class ProductResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@Schema(title = "상품 부정 키워드 조회 응답")
 	public static class NegativeKeyword {
 
 		@Schema(description = "부정 키워드", example = "['keyword1', 'keyword2']")

@@ -1,5 +1,6 @@
 package spring.changyong.review.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ public class ReviewResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@Schema(title = "리뷰 조회 응답")
 	public static class Result {
 		private String nickname;
 		private Long id;

@@ -17,6 +17,7 @@ public class SearchResponse {
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor
+	@Schema(title = "상품 검색 결과 조회 응답")
 	public static class Product {
 		@Schema(description = "상품 ID", example = "1")
 		private Long id;

@@ -63,14 +63,13 @@ logging:
   level:
     org:
       elasticsearch:
-        client:
-          RestClient: debug
+        client: trace
       springframework:
         data:
           elasticsearch:
             core: debug
             client:
-              WIRE: debug
+              ClientConfiguration: trace
 server:
   servlet:
     encoding:

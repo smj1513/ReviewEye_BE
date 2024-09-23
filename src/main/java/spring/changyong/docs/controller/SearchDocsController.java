@@ -15,7 +15,7 @@ public interface SearchDocsController {
 
 	@Operation(summary = "키워드 기반 상품 검색", description = "키워드 기반 상품 검색")
 	@ApiResponse(responseCode = "200", description = "성공")
-	CommonResponse<Slice<SearchResponse.Product>> productSearchByKeyword(
+	CommonResponse<Slice<SearchResponse.ProductResult>> productSearchByKeyword(
 			@Parameter(description = "검색 키워드 (키워드 + 카테고리)")
 			@RequestParam String keyword,
 			@Parameter(description = "페이지 번호 - 0번부터 시작")
@@ -25,7 +25,7 @@ public interface SearchDocsController {
 
 	@Operation(summary = "상품명 기반 상품 검색", description = "상품명 기반 상품 검색")
 	@ApiResponse(responseCode = "200", description = "성공")
-	CommonResponse<Slice<SearchResponse.Product>> productSearchByName(
+	CommonResponse<Slice<SearchResponse.ProductResult>> productSearchByName(
 			@Parameter(description = "상품명")
 			@RequestParam String name,
 			@Parameter(description = "페이지 번호 - 0번부터 시작")

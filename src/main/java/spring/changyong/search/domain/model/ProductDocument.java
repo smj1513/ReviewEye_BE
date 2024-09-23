@@ -1,67 +1,58 @@
 package spring.changyong.search.domain.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Setting;
-import spring.changyong.product.domain.model.Product;
 import spring.changyong.review.domain.model.Review;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Document(indexName = "product")
-@Setting(settingPath = "elasticsearch/product-settings.json")
+@Setting(settingPath = "elasticsearch/elastic-settings.json")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDocument {
 
 	@Id
+	@Field(name = "id", type = FieldType.Long)
 	private Long id;
 
-	@Field(name = "product_id")
+	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
+	@Field(type = FieldType.Text, analyzer = "nori_tokenizer")
 	private String name;
 
+	@Field(type = FieldType.Integer, name = "price")
 	private Integer price;
 
-	private String brand;
-
-	private String category;
-
-	private Double star;
-
-	private String imageList;
-
-	private String thumbnail;
-
-	@Field(name = "discount_price")
+	@Field(type = FieldType.Integer, name = "discount_price")
 	private Integer discountPrice;
 
-	@Field(type = FieldType.Nested)
-	private List<ReviewDocument> reviews;
+	@Field(type = FieldType.Keyword)
+	private String brand;
 
-	public static ProductDocument from(Product product){
-		ProductDocument productDocument = new ProductDocument();
-		productDocument.setId(product.getId().longValue());
-		productDocument.setProductId(product.getProductId());
-		productDocument.setName(product.getName());
-		productDocument.setPrice(product.getPrice());
-		productDocument.setBrand(product.getBrand());
-		productDocument.setCategory(product.getCategory());
-		productDocument.setStar(product.getStar());
-		productDocument.setImageList(product.getImageList());
-		productDocument.setThumbnail(product.getThumbnail());
-		Optional.ofNullable(product.getReviews())
-				.ifPresent(reviews ->
-						reviews.stream()
-								.map(ReviewDocument::from)
-								.forEach(productDocument.getReviews()::add)
-				);
-		return productDocument;
-	}
+	@Field(type = FieldType.Keyword)
+	private String category;
+
+	@Field(type = FieldType.Double)
+	private Double star;
+
+	@Field(type = FieldType.Text)
+	private String imageList;
+
+	@Field(type = FieldType.Text)
+	private String thumbnail;
+
+	@Field(type = FieldType.Nested, includeInParent = true)
+	@Builder.Default
+	private List<Review> reviews = new ArrayList<>();
+
 }

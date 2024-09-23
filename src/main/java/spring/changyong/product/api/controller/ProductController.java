@@ -18,16 +18,16 @@ public class ProductController implements ProductDocsController {
 	private final ProductAppService productAppService;
 
 	@GetMapping("/{id}/detail")
-	public CommonResponse<ProductResponse.Detail> getProductDetail(@PathVariable Integer id) {
+	public CommonResponse<ProductResponse.Detail> getProductDetail(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getProductDetail(id));
 	}
 
 	@GetMapping("/{id}/positive-keywords")
-	public CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(@PathVariable Integer id) {
+	public CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getPositiveKeyword(id));
 	}
 	@GetMapping("/{id}/negative-keywords")
-	public CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(@PathVariable Integer id) {
+	public CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getNegativeKeyword(id));
 	}
 }

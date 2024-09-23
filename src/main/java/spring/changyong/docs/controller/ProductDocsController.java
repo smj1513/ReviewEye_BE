@@ -16,17 +16,17 @@ public interface ProductDocsController {
 	@ApiResponse(responseCode = "200", description = "성공")
 	CommonResponse<ProductResponse.Detail> getProductDetail(
 			@Parameter(description = "상품 ID")
-			@PathVariable Integer id);
+			@PathVariable String id);
 
 	@Operation(summary = "상품 긍정 키워드 조회", description = "상품 긍정 키워드 조회")
 	@ApiResponse(responseCode = "200", description = "성공")
 	CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(
 			@Parameter(description = "상품 ID")
-			@PathVariable Integer id);
+			@PathVariable String id);
 
 	@Operation(summary = "상품 부정 키워드 조회", description = "상품 부정 키워드 조회")
 	@ApiResponse(responseCode = "200", description = "성공")
 	CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(
 			@Parameter(description = "상품 ID")
-			@PathVariable Integer id);
+			@PathVariable String id);
 }

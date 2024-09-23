@@ -9,9 +9,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ElasticSearchService {
 
-	private final ElasticsearchClient esClient;
-
-	private final ElasticsearchOperations elasticsearchOperations;
-
-
 }

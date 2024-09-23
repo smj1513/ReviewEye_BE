@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.document.SearchDocument;
+import spring.changyong.product.domain.model.Product;
 import spring.changyong.search.domain.model.ProductDocument;
 
 import java.util.List;
@@ -18,9 +18,9 @@ public class SearchResponse {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Schema(title = "상품 검색 결과 조회 응답")
-	public static class Product {
-		@Schema(description = "상품 ID", example = "1")
-		private Long id;
+	public static class ProductResult {
+		@Schema(description = "상품 ID", example = "A00000000123")
+		private String id;
 		@Schema(description = "상품명", example = "독도 크림")
 		private String name;
 		@Schema(description = "가격", example = "20000")
@@ -36,14 +36,14 @@ public class SearchResponse {
 		@Schema(description = "검색결과의 관련성 점수", example = "4.8")
 		private Float score;
 
-		public static SearchResponse.Product from(SearchHit<ProductDocument> searchHit){
-			return Product
+		public static ProductResult from(SearchHit<ProductDocument> searchHit){
+			return ProductResult
 					.builder()
 					.name(searchHit.getContent().getName())
 					.imageUrl(searchHit.getContent().getThumbnail())
 					.price(searchHit.getContent().getPrice())
 					.discountPrice(searchHit.getContent().getDiscountPrice())
-					.id(searchHit.getContent().getId())
+					.id(searchHit.getContent().getProductId())
 					.score(searchHit.getScore())
 					.build();
 		}

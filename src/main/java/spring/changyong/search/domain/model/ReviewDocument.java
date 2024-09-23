@@ -1,53 +1,45 @@
 package spring.changyong.search.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import spring.changyong.review.domain.model.Review;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
+@Document(indexName = "review")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@Document(indexName = "review")
+@Setting(settingPath = "elasticsearch/elastic-settings.json")
+@Builder
 public class ReviewDocument {
-
 	@Id
+	@Field
 	private Long id;
 
-	@Field(type = FieldType.Text)
-	private String nickname;
+	@Field(name = "product_id")
+	private String productId;
 
+	@Field(analyzer = "nori_tokenizer")
 	private String review;
 
+	@Field
 	private Long star;
 
-	private String date;
-
-	private String userSkinInfo;
-
-	private String evaluation;
-
-	private String photo_list;
-
+	@Field
 	private Long recommend;
 
-	private Double usefulPoint;
+	@Field
+	private Long sentiment;
 
-	public static ReviewDocument from(Review review){
-		ReviewDocument reviewDocument = new ReviewDocument();
-		reviewDocument.setId(review.getId().longValue());
-		reviewDocument.setNickname(review.getNickname());
-		reviewDocument.setReview(review.getReview());
-		reviewDocument.setStar(review.getStar());
-		reviewDocument.setDate(review.getDate());
-		reviewDocument.setUserSkinInfo(review.getUserSkinInfo());
-		reviewDocument.setEvaluation(review.getEvaluation());
-		reviewDocument.setPhoto_list(review.getPhoto_list());
-		reviewDocument.setRecommend(review.getRecommend());
-		reviewDocument.setUsefulPoint(review.getUsefulPoint());
-		return reviewDocument;
-	}
+	@Field
+	private String nickname;
+
+	@Field(name = "user_skin_info", type = FieldType.Text)
+	private String userSkinInfo;
+
+	@Field(name = "evaluation", type = FieldType.Text)
+	private String evaluation;
 }

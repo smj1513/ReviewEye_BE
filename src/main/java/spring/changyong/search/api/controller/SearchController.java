@@ -18,16 +18,16 @@ public class SearchController implements SearchDocsController {
 	private final SearchAppService searchService;
 
 	@GetMapping("/products/keyword/search")
-	public CommonResponse<Slice<SearchResponse.Product>> productSearchByKeyword(@RequestParam String keyword,
-	                                                                            @RequestParam(defaultValue = "0") int page,
-	                                                                            @RequestParam(defaultValue = "10") int size) {
+	public CommonResponse<Slice<SearchResponse.ProductResult>> productSearchByKeyword(@RequestParam String keyword,
+	                                                                                  @RequestParam(defaultValue = "0") int page,
+	                                                                                  @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearchByKeyword(keyword, page, size));
 	}
 
 	@GetMapping("/products/name/search")
-	public CommonResponse<Slice<SearchResponse.Product>> productSearchByName(@RequestParam String name,
-	                                                                   @RequestParam(defaultValue = "0") int page,
-	                                                                   @RequestParam(defaultValue = "10") int size) {
+	public CommonResponse<Slice<SearchResponse.ProductResult>> productSearchByName(@RequestParam String name,
+	                                                                               @RequestParam(defaultValue = "0") int page,
+	                                                                               @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.productSearchByName(name, page, size));
 	}
 }

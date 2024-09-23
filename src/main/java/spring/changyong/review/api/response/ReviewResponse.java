@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import spring.changyong.review.domain.model.Review;
+import spring.changyong.search.domain.model.ReviewDocument;
 
 public class ReviewResponse {
 	@Data
@@ -14,17 +15,25 @@ public class ReviewResponse {
 	@AllArgsConstructor
 	@Schema(title = "리뷰 조회 응답")
 	public static class Result {
-		private String nickname;
 		private Long id;
 		private String content;
-		private Double useFulPoint;
+		private String nickname;
+		private String userSkinInfo;
+		private String evaluation;
+		private Long star;
+		private Long recommend;
+		private boolean sentiment;
 
-		public static Result from(Review review){
+		public static Result from(ReviewDocument review){
 			return Result.builder()
-					.id(review.getId().longValue())
-					.nickname(review.getNickname())
+					.id(review.getId())
 					.content(review.getReview())
-					.useFulPoint(review.getUsefulPoint())
+					.nickname(review.getNickname())
+					.userSkinInfo(review.getUserSkinInfo())
+					.evaluation(review.getEvaluation())
+					.star(review.getStar())
+					.recommend(review.getRecommend())
+					.sentiment(review.getSentiment() == 1) // 1이 긍정 0이 부정
 					.build();
 		}
 	}

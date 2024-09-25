@@ -6,13 +6,12 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Setting;
-import spring.changyong.review.domain.model.Review;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Document(indexName = "product")
-@Setting(settingPath = "elasticsearch/elastic-settings.json")
+@Setting(settingPath = "elasticsearch/product-settings.json")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,7 +26,7 @@ public class ProductDocument {
 	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
-	@Field(type = FieldType.Text, analyzer = "nori_tokenizer")
+	@Field(type = FieldType.Text)
 	private String name;
 
 	@Field(type = FieldType.Integer, name = "price")
@@ -53,6 +52,6 @@ public class ProductDocument {
 
 	@Field(type = FieldType.Nested, includeInParent = true)
 	@Builder.Default
-	private List<Review> reviews = new ArrayList<>();
+	private List<ReviewDocument> reviews = new ArrayList<>();
 
 }

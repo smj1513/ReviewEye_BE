@@ -8,9 +8,9 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.changyong.product.domain.model.Product;
 import spring.changyong.search.api.response.SearchResponse;
 import spring.changyong.search.domain.model.ProductDocument;
+import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 import spring.changyong.search.domain.repository.ReviewSearchRepository;
 
@@ -25,11 +25,11 @@ public class SearchAppService {
 	private final ProductSearchRepository productSearchRepository;
 	private final ReviewSearchRepository reviewSearchRepository;
 
-	public Slice<SearchResponse.ProductResult> productSearchByKeyword(String keyword, int page, int size) {
+	public Slice<SearchResponse.ProductResult> searchProductByKeyword(String keyword, int page, int size) {
 		return null;
 	}
 
-	public Slice<SearchResponse.ProductResult> productSearchByName(String name, int page, int size) {
+	public Slice<SearchResponse.ProductResult> searchProductByName(String name, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ProductDocument> result = productSearchRepository.searchByName(name, pageRequest);
@@ -41,5 +41,20 @@ public class SearchAppService {
 		boolean hasNext = result.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
 
 		return new SliceImpl<>(productResultList, pageRequest, hasNext);
+	}
+
+	public Slice<SearchResponse.ReviewResult> searchReviewByProductId(String id, String keyword, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+
+		SearchHits<ReviewDocument> searchHits = reviewSearchRepository.searchByProductId(id, keyword, pageRequest);
+		searchHits.forEach(reviewDocument -> log.info("reviewDocument: {}", reviewDocument.getContent()));
+		List<SearchResponse.ReviewResult> reviewResultList = searchHits
+				.stream()
+				.map(SearchResponse.ReviewResult::from)
+				.toList();
+
+		boolean hasNext = searchHits.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
+
+		return new SliceImpl<>(reviewResultList, pageRequest, hasNext);
 	}
 }

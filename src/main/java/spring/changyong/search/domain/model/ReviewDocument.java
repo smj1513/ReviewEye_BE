@@ -8,33 +8,33 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
 @Document(indexName = "review")
-@AllArgsConstructor
+@Setting(settingPath = "elasticsearch/review-settings.json")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@Setting(settingPath = "elasticsearch/elastic-settings.json")
 @Builder
 public class ReviewDocument {
 	@Id
-	@Field
+	@Field(name = "id", type = FieldType.Long)
 	private Long id;
 
-	@Field(name = "product_id")
+	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
-	@Field(analyzer = "nori_tokenizer")
+	@Field(name = "review", type = FieldType.Text)
 	private String review;
 
-	@Field
+	@Field(name = "star", type = FieldType.Long)
 	private Long star;
 
-	@Field
+	@Field(name = "recommend", type = FieldType.Long)
 	private Long recommend;
 
-	@Field
+	@Field(name = "sentiment", type = FieldType.Long)
 	private Long sentiment;
 
-	@Field
+	@Field(name = "nickname", type = FieldType.Keyword)
 	private String nickname;
 
 	@Field(name = "user_skin_info", type = FieldType.Text)

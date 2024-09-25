@@ -1,0 +1,36 @@
+{
+  "analysis": {
+    "tokenizer": {
+      "nori_tokenizer": {
+        "type": "nori_tokenizer",
+        "decompound_mode": "mixed"
+      }
+    },
+    "filter": {
+      "nori_part_of_speech": {
+        "type": "nori_part_of_speech"
+      },
+      "remove_non_korean": {
+        "type": "pattern_replace",
+        "pattern": "[^가-힣]",
+        "replacement": ""
+      },
+      "custom_stop": {
+        "type": "stop",
+        "stopwords": ["의","가","이","은","을","들","는","좀","잘","걍","과","도","를","으로","자","에","와","한","하다", "겠", "음", "듯", "굿"]
+      }
+    },
+    "analyzer": {
+      "nori_analyzer": {
+        "type": "custom",
+        "tokenizer": "nori_tokenizer",
+        "filter": [
+          "nori_part_of_speech",
+          "remove_non_korean",
+          "custom_stop"
+        ]
+      }
+    }
+  }
+}
+

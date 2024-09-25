@@ -1,0 +1,45 @@
+{
+  "analysis": {
+    "tokenizer": {
+      "nori_tokenizer": {
+        "type": "nori_tokenizer",
+        "decompound_mode": "mixed"
+      }
+    },
+    "filter": {
+      "nori_part_of_speech": {
+        "type": "nori_part_of_speech"
+      },
+      "my_synonym": {
+        "type": "synonym",
+        "synonyms": [
+          "썬,선"
+        ]
+      },
+      "remove_non_korean": {
+        "type": "pattern_replace",
+        "pattern": "[^가-힣]",
+        "replacement": ""
+      },
+      "custom_stop": {
+        "type": "stop",
+        "stopwords": [
+          "월",
+          "용량",
+          "기획"
+        ]
+      }
+    },
+    "analyzer": {
+      "nori_analyzer": {
+        "type": "custom",
+        "tokenizer": "nori_tokenizer",
+        "filter": [
+          "nori_part_of_speech",
+          "remove_non_korean"
+        ]
+      }
+    }
+  }
+}
+

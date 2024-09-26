@@ -45,21 +45,14 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		NativeQuery query = nativeQueryBuilder.withQuery(
 						QueryBuilders
 								.bool()
-								.must(
-										QueryBuilders
-												.wildcard()
-												.field("name")
-												.value("*"+nameKeyword+"*")
-												.build()
-												._toQuery()
-								)
-								.must(
+								.should(
 										QueryBuilders.
 												match()
 												.field("name")
-												.analyzer(SearchProperties.NORI_ANALYZER)
 												.query(nameKeyword)
+												.autoGenerateSynonymsPhraseQuery(true)
 												.fuzziness("AUTO")
+												.boost(2.0F)
 												.build()
 												._toQuery()
 								)
@@ -68,8 +61,6 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 												matchPhrase()
 												.field("name")
 												.slop(1)
-												.analyzer(SearchProperties.NORI_ANALYZER)
-												.boost(2.0F)
 												.query(nameKeyword)
 												.build()
 												._toQuery()

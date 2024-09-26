@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import spring.changyong.product.domain.model.Product;
 import spring.changyong.search.domain.model.ProductDocument;
@@ -13,6 +14,11 @@ import spring.changyong.search.domain.model.ReviewDocument;
 import java.util.List;
 
 public class SearchResponse {
+
+	public static class Result<T>{
+		private Double timeTook;
+		private Slice<T> result;
+	}
 
 	@Data
 	@Builder

@@ -13,21 +13,15 @@
       "my_synonym": {
         "type": "synonym",
         "synonyms": [
-          "썬,선"
+          "썬,선",
+          "마녀,마녀공장",
+          "공장,마녀공장"
         ]
       },
       "remove_non_korean": {
         "type": "pattern_replace",
-        "pattern": "[^가-힣]",
+        "pattern": "[^a-zA-Z0-9가-힣]",
         "replacement": ""
-      },
-      "custom_stop": {
-        "type": "stop",
-        "stopwords": [
-          "월",
-          "용량",
-          "기획"
-        ]
       }
     },
     "analyzer": {
@@ -35,8 +29,8 @@
         "type": "custom",
         "tokenizer": "nori_tokenizer",
         "filter": [
-          "nori_part_of_speech",
-          "remove_non_korean"
+          "remove_non_korean",
+          "my_synonym"
         ]
       }
     }

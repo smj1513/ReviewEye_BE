@@ -8,29 +8,82 @@
     },
     "filter": {
       "nori_part_of_speech": {
-        "type": "nori_part_of_speech"
+        "type": "nori_part_of_speech",
+        "stoptags": [
+          "E",
+          "IC",
+          "J",
+          "MAG",
+          "MAJ",
+          "MM",
+          "SP",
+          "SSC",
+          "SSO",
+          "SC",
+          "SE",
+          "XPN",
+          "XSA",
+          "XSN",
+          "XSV",
+          "UNA",
+          "NA",
+          "VSV",
+          "MAG",
+          "MAJ"
+        ]
+      },
+      "remove_empty": {
+        "type": "length",
+        "min": 1
       },
       "remove_non_korean": {
         "type": "pattern_replace",
-        "pattern": "[^가-힣]",
+        "pattern": "[^a-zA-Z0-9가-힣]|[\uD83C\uDF00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]",
         "replacement": ""
       },
       "custom_stop": {
         "type": "stop",
-        "stopwords": ["의","가","이","은","을","들","는","좀","잘","걍","과","도","를","으로","자","에","와","한","하다", "겠", "음", "듯", "굿"]
+        "stopwords": [
+          "의",
+          "가",
+          "이",
+          "은",
+          "을",
+          "들",
+          "는",
+          "좀",
+          "잘",
+          "걍",
+          "과",
+          "도",
+          "를",
+          "으로",
+          "자",
+          "에",
+          "와",
+          "한",
+          "하다",
+          "겠",
+          "음",
+          "듯",
+          "굿"
+        ]
       }
     },
     "analyzer": {
       "nori_analyzer": {
         "type": "custom",
         "tokenizer": "nori_tokenizer",
+        "char_filter": [
+          "html_strip"
+        ],
         "filter": [
           "nori_part_of_speech",
           "remove_non_korean",
-          "custom_stop"
+          "custom_stop",
+          "remove_empty"
         ]
       }
     }
   }
 }
-

@@ -48,7 +48,7 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 										.build()
 										._toQuery()
 						)
-						.must(
+						.should(
 								QueryBuilders
 										.match()
 										.field("review")

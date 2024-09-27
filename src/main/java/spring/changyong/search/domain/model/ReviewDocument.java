@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Setting;
+import spring.changyong.search.SearchProperties;
 
 @Document(indexName = "review")
 @Setting(settingPath = "elasticsearch/review-settings.json")
@@ -15,6 +16,7 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Setter
 @Builder
 public class ReviewDocument {
+
 	@Id
 	@Field(name = "id", type = FieldType.Long)
 	private Long id;
@@ -22,7 +24,7 @@ public class ReviewDocument {
 	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
-	@Field(name = "review", type = FieldType.Text)
+	@Field(name = "review", type = FieldType.Text, analyzer = SearchProperties.NORI_ANALYZER)
 	private String review;
 
 	@Field(name = "star", type = FieldType.Long)
@@ -42,4 +44,5 @@ public class ReviewDocument {
 
 	@Field(name = "evaluation", type = FieldType.Text)
 	private String evaluation;
+
 }

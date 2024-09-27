@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import spring.changyong.review.domain.model.Review;
 import spring.changyong.search.domain.model.ReviewDocument;
 
 public class ReviewResponse {
@@ -24,7 +23,7 @@ public class ReviewResponse {
 		private Long recommend;
 		private boolean sentiment;
 
-		public static Result from(ReviewDocument review){
+		public static Result from(ReviewDocument review) {
 			return Result.builder()
 					.id(review.getId())
 					.content(review.getReview())

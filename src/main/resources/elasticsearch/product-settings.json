@@ -1,9 +1,20 @@
 {
+  "index": {
+    "max_ngram_diff": 4
+  },
   "analysis": {
     "tokenizer": {
       "nori_tokenizer": {
-        "type": "nori_tokenizer",
-        "decompound_mode": "mixed"
+        "type": "nori_tokenizer"
+      },
+      "n_gram_tokenizer": {
+        "type": "ngram",
+        "min_gram": 2,
+        "max_gram": 5,
+        "token_chars": [
+          "letter",
+          "digit"
+        ]
       }
     },
     "filter": {
@@ -13,15 +24,18 @@
       "my_synonym": {
         "type": "synonym",
         "synonyms": [
-          "썬,선",
-          "마녀,마녀공장",
-          "공장,마녀공장"
+          "썬,선"
         ]
       },
-      "remove_non_korean": {
+      "remove_spec_char": {
         "type": "pattern_replace",
         "pattern": "[^a-zA-Z0-9가-힣]",
         "replacement": ""
+      },
+      "shingle": {
+        "type": "shingle",
+        "min_shingle_size": 2,
+        "max_shingle_size": 4
       }
     },
     "analyzer": {
@@ -29,11 +43,27 @@
         "type": "custom",
         "tokenizer": "nori_tokenizer",
         "filter": [
-          "remove_non_korean",
+          "nori_part_of_speech",
+          "remove_spec_char",
           "my_synonym"
+        ]
+      },
+      "n_gram_analyzer": {
+        "type": "custom",
+        "tokenizer": "n_gram_tokenizer",
+        "filter": [
+          "lowercase",
+          "remove_spec_char"
+        ]
+      },
+      "trigram": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "shingle"
         ]
       }
     }
   }
 }
-

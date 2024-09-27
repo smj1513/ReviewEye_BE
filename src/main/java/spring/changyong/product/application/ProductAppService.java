@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import spring.changyong.common.api.code.ErrorCode;
 import spring.changyong.common.exception.BusinessLogicException;
 import spring.changyong.product.api.response.ProductResponse;
-import spring.changyong.product.domain.model.Product;
-import spring.changyong.product.domain.repository.ProductRepository;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 

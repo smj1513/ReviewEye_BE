@@ -1,6 +1,11 @@
 package spring.changyong.search.persistence.repository;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.SuggestMode;
+import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
+import co.elastic.clients.elasticsearch.core.search.Suggester;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +29,12 @@ import java.util.List;
 public class ProductSearchRepositoryImpl implements CustomProductSearchRepository {
 
 	private final ElasticsearchOperations elasticsearchOperations;
+	private final ElasticsearchClient elasticsearchClient;
 
 	@Override
 	public SearchHits<ProductDocument> searchByName(String nameKeyword, Pageable pageable) {
+		//NativeQuery
 		NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
-
 
 		HighlightField highlightField = new HighlightField("name",
 				HighlightFieldParameters.builder()
@@ -41,18 +47,32 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		));
 		HighlightQuery highlightQuery = new HighlightQuery(highlight, Highlight.class);
 
-
 		NativeQuery query = nativeQueryBuilder.withQuery(
 						QueryBuilders
 								.bool()
 								.should(
 										QueryBuilders.
+												multiMatch()
+												.query(nameKeyword)
+												.fields(List.of("name", "brand"))
+												.type(TextQueryType.BestFields)
+												.autoGenerateSynonymsPhraseQuery(true)
+												.operator(Operator.And)
+												.tieBreaker(0.3)
+												.fuzziness("1")
+												.prefixLength(2)
+												.boost(2.0F)
+												.build()._toQuery()
+								)
+								.should(
+										QueryBuilders.
 												match()
 												.field("name")
 												.query(nameKeyword)
-												.autoGenerateSynonymsPhraseQuery(true)
-												.fuzziness("AUTO")
-												.boost(2.0F)
+												.analyzer("standard")
+												.operator(Operator.And)
+												.fuzziness("1")
+												.boost(3F)
 												.build()
 												._toQuery()
 								)
@@ -60,12 +80,21 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 										QueryBuilders.
 												matchPhrase()
 												.field("name")
-												.slop(1)
 												.query(nameKeyword)
+												.analyzer("standard")
+												.boost(3F)
 												.build()
 												._toQuery()
 								)
-								.minimumShouldMatch("83%")
+								.should(
+										QueryBuilders
+												.term()
+												.field("name")
+												.value(nameKeyword)
+												.boost(5F)
+												.build()._toQuery()
+								)
+								.minimumShouldMatch("1")
 								.build()._toQuery()
 				)
 				.withPageable(pageable)
@@ -73,6 +102,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.build();
 
 		SearchHits<ProductDocument> result = elasticsearchOperations.search(query, ProductDocument.class);
+
 
 		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}", searchHit.getContent().getName(), searchHit.getScore()));
 		return result;

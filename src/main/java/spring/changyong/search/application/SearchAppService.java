@@ -33,6 +33,7 @@ public class SearchAppService {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ProductDocument> result = productSearchRepository.searchByName(name, pageRequest);
+
 		List<SearchResponse.ProductResult> productResultList = result
 				.stream()
 				.map(SearchResponse.ProductResult::from) // 변환

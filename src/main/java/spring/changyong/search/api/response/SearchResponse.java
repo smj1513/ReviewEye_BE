@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import spring.changyong.product.domain.model.Product;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 
@@ -15,8 +14,12 @@ import java.util.List;
 
 public class SearchResponse {
 
-	public static class Result<T>{
-		private Double timeTook;
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Result<T> {
+		private Integer took;
 		private Slice<T> result;
 	}
 
@@ -43,7 +46,7 @@ public class SearchResponse {
 		@Schema(description = "검색결과의 관련성 점수", example = "4.8")
 		private Float score;
 
-		public static ProductResult from(SearchHit<ProductDocument> searchHit){
+		public static ProductResult from(SearchHit<ProductDocument> searchHit) {
 			return ProductResult
 					.builder()
 					.name(searchHit.getHighlightField("name").getFirst())
@@ -80,7 +83,7 @@ public class SearchResponse {
 		@Schema(description = "평가", example = "좋아요")
 		private String evaluation;
 
-		public static ReviewResult from(SearchHit<ReviewDocument> searchHit){
+		public static ReviewResult from(SearchHit<ReviewDocument> searchHit) {
 			return ReviewResult
 					.builder()
 					.id(searchHit.getContent().getId())

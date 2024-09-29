@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.core.query.highlight.HighlightFiel
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Repository;
 import spring.changyong.search.domain.model.ReviewDocument;
+import spring.changyong.search.utils.builder.ReviewSearchQueryBuilder;
 
 import java.util.List;
 
@@ -24,7 +25,18 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 
 	@Override
 	public SearchHits<ReviewDocument> searchByProductId(String id, String keyword, Pageable pageable) {
-		NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
+		ReviewSearchQueryBuilder queryBuilder = new ReviewSearchQueryBuilder(id, keyword)
+				.addProductIdFilter()
+				.addTermQuery()
+				.addMatchQuery()
+				.addMatchPhraseQuery();
+
+		NativeQuery nativeQuery = queryBuilder.build(pageable);
+		return elasticsearchOperations.search(nativeQuery, ReviewDocument.class);
+	}
+
+	/*
+	* NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
 		HighlightField highlightField = new HighlightField("review",
 				HighlightFieldParameters.builder()
 						.withPreTags("<strong>")
@@ -87,6 +99,5 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 				.withHighlightQuery(highlightQuery)
 				.withPageable(pageable)
 				.build();
-		return elasticsearchOperations.search(nativeQuery, ReviewDocument.class);
-	}
+	* */
 }

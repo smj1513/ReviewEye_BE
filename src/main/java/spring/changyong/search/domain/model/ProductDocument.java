@@ -42,14 +42,20 @@ public class ProductDocument {
 	@Field(type = FieldType.Double)
 	private Double star;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Keyword)
 	private String imageList;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Keyword)
 	private String thumbnail;
 
 	@Field(type = FieldType.Nested, includeInParent = true)
 	@Builder.Default
-	private List<ReviewDocument> reviews = new ArrayList<>();
+	private List<Tag> positiveTags = new ArrayList<>();
+
+
+	@Field(type = FieldType.Nested,termVector = TermVector.with_positions_payloads)
+	@Builder.Default
+	private List<Tag> negativeTags = new ArrayList<>();
+
 
 }

@@ -11,6 +11,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SearchResponse {
 
@@ -91,7 +92,7 @@ public class SearchResponse {
 					.content(searchHit.getHighlightField("review").getFirst())
 					.star(searchHit.getContent().getStar())
 					.recommend(searchHit.getContent().getRecommend())
-					.sentiment(searchHit.getContent().getSentiment() == 1)
+					.sentiment(false)
 					.nickname(searchHit.getContent().getNickname())
 					.userSkinInfo(searchHit.getContent().getUserSkinInfo())
 					.evaluation(searchHit.getContent().getEvaluation())

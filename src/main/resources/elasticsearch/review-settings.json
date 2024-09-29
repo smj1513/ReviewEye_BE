@@ -68,6 +68,12 @@
           "듯",
           "굿"
         ]
+      },
+      "my_synonym": {
+        "type": "synonym",
+        "synonyms": [
+          "촉촉,수분감"
+        ]
       }
     },
     "analyzer": {

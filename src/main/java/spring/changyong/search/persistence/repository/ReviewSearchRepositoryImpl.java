@@ -12,7 +12,6 @@ import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Repository;
-import spring.changyong.search.SearchProperties;
 import spring.changyong.search.domain.model.ReviewDocument;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 						.build());
 
 		Highlight highlight = new Highlight(List.of(
-			highlightField
+				highlightField
 		));
 		HighlightQuery highlightQuery = new HighlightQuery(highlight, Highlight.class);
 
@@ -48,16 +47,39 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 										.build()
 										._toQuery()
 						)
-						.should(
+						.must(
 								QueryBuilders
-										.match()
-										.field("review")
-										.query(keyword)
-										.fuzziness("AUTO")
-										.analyzer(SearchProperties.NORI_ANALYZER)
-										.minimumShouldMatch("90%")
-										.build()
-										._toQuery()
+										.bool()
+										.should(
+												QueryBuilders.term()
+														.field("review")
+														.value(keyword)
+														.boost(3F)
+														.build()
+														._toQuery()
+										)
+										.should(
+												QueryBuilders.match()
+														.field("review")
+														.analyzer("nori_analyzer")
+														.query(keyword)
+														.fuzziness("1")
+														.boost(2F)
+														.build()
+														._toQuery()
+										)
+										.should(
+												QueryBuilders
+														.matchPhrase()
+														.field("review")
+														.query(keyword)
+														.slop(1)
+														.boost(1F)
+														.analyzer("nori_analyzer")
+														.build()._toQuery()
+										)
+										.minimumShouldMatch("1")
+										.build()._toQuery()
 						)
 						.build()
 						._toQuery()

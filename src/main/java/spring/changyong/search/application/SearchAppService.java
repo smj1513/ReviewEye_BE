@@ -48,7 +48,6 @@ public class SearchAppService {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ReviewDocument> searchHits = reviewSearchRepository.searchByProductId(id, keyword, pageRequest);
-		searchHits.forEach(reviewDocument -> log.info("reviewDocument: {}", reviewDocument.getContent()));
 		List<SearchResponse.ReviewResult> reviewResultList = searchHits
 				.stream()
 				.map(SearchResponse.ReviewResult::from)

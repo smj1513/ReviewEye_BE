@@ -3,9 +3,9 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      url: elastic.ajb.kr:443
+      url: localhost:9200
       username: "elastic"
       password: "032621"
       ssl:
-        trust-store: cert_key.p12
+        trust-store: trustStore.p12
         trust-store-password: "000221"

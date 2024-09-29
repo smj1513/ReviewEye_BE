@@ -1,5 +1,6 @@
 package spring.changyong.product.api.controller;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

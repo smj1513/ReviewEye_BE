@@ -26,7 +26,16 @@ public class SearchAppService {
 	private final ReviewSearchRepository reviewSearchRepository;
 
 	public Slice<SearchResponse.ProductResult> searchProductByKeyword(String keyword, int page, int size) {
-		return null;
+		PageRequest pageRequest = PageRequest.of(page, size);
+
+		SearchHits<ProductDocument> result = productSearchRepository.searchByTag(keyword, pageRequest);
+		List<SearchResponse.ProductResult> productResultList = result
+				.stream()
+				.map(SearchResponse.ProductResult::from)
+				.toList();
+
+		boolean hasNext = result.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
+		return new SliceImpl<>(productResultList, pageRequest, hasNext);
 	}
 
 	public Slice<SearchResponse.ProductResult> searchProductByName(String name, int page, int size) {
@@ -56,5 +65,9 @@ public class SearchAppService {
 		boolean hasNext = searchHits.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
 
 		return new SliceImpl<>(reviewResultList, pageRequest, hasNext);
+	}
+
+	public Slice<SearchResponse.AutoComplete> autoCompleteQuery(String query, int page, int size) {
+		return null;
 	}
 }

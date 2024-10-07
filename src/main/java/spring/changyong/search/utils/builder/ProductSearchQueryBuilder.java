@@ -31,25 +31,29 @@ public class ProductSearchQueryBuilder {
 		return this;
 	}
 
-	public ProductSearchQueryBuilder addTermQueryStrategy(){
+	public ProductSearchQueryBuilder addTermQuery(){
 		queryStrategies.add(new ProductTermQueryStrategy());
 		return this;
 	}
 
-	public ProductSearchQueryBuilder addMatchPhraseQueryStrategy(){
+	public ProductSearchQueryBuilder addMatchPhraseQuery(){
 		queryStrategies.add(new ProductMatchPhraseQueryStrategy());
 		return this;
 	}
+
+
 	private HighlightQuery createHighlightQuery() {
 		HighlightField highlightField = new HighlightField("name",
 				HighlightFieldParameters.builder()
-						.withPreTags("")
-						.withPostTags("")
+						.withPreTags("<strong>")
+						.withPostTags("</strong>")
 						.build());
 
 		Highlight highlight = new Highlight(List.of(highlightField));
 		return new HighlightQuery(highlight, Highlight.class);
 	}
+
+
 
 	public NativeQuery build(Pageable pageable){
 
@@ -60,6 +64,7 @@ public class ProductSearchQueryBuilder {
 			boolQueryBuilder.should(strategy.buildQuery(nameKeyword));
 		}
 		boolQueryBuilder.minimumShouldMatch("1");
+
 
 		return nativeQueryBuilder
 				.withQuery(boolQueryBuilder.build()._toQuery())

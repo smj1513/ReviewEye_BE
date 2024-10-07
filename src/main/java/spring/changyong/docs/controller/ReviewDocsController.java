@@ -16,7 +16,7 @@ public interface ReviewDocsController {
 
 	@Operation(summary = "상품 리뷰 조회", description = "상품 리뷰 조회")
 	@ApiResponse(responseCode = "200", description = "성공")
-	CommonResponse<Page<ReviewResponse.Result>> getProductReview(
+	CommonResponse<Slice<ReviewResponse.Result>> getProductReview(
 			@Parameter(description = "상품 ID")
 			@PathVariable String id,
 			@Parameter(description = "페이지 번호 - 0번부터 시작")

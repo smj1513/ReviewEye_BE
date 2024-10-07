@@ -18,8 +18,18 @@ spring:
       hibernate:
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQL8Dialect
+  main:
+    allow-bean-definition-overriding: true
 
-
+  ai:
+    embedding:
+      transformer:
+        onnx:
+          model-uri: https://huggingface.co/Xenova/kobert/blob/main/onnx/model.onnx
+          model-output-name: token_embedding
+        tokenizer:
+          uri: https://huggingface.co/Xenova/kobert/blob/main/tokenizer.json
+        enabled: true
 springdoc:
   swagger-ui:
     groups-order: DESC

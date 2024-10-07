@@ -9,6 +9,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
+import spring.changyong.search.domain.model.Tag;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +51,13 @@ public class SearchResponse {
 		public static ProductResult from(SearchHit<ProductDocument> searchHit) {
 			return ProductResult
 					.builder()
-					.name(searchHit.getHighlightField("name").getFirst())
+					.name(searchHit.getContent().getName())
 					.imageUrl(searchHit.getContent().getThumbnail())
 					.price(searchHit.getContent().getPrice())
 					.discountPrice(searchHit.getContent().getDiscountPrice())
 					.id(searchHit.getContent().getProductId())
 					.score(searchHit.getScore())
+					.keywords(searchHit.getContent().getPositiveTags().stream().map(Tag::getKeyword).toList())
 					.build();
 		}
 	}
@@ -98,5 +100,13 @@ public class SearchResponse {
 					.evaluation(searchHit.getContent().getEvaluation())
 					.build();
 		}
+	}
+
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class AutoComplete {
+		private List<String> productNames;
 	}
 }

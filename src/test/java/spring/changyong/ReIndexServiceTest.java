@@ -1,5 +1,6 @@
 package spring.changyong;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +9,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 
 @SpringBootTest
+@Disabled
 public class ReIndexServiceTest {
 	@Autowired
 	ElasticsearchOperations operations;

@@ -18,12 +18,11 @@ public class TagNestedQueryStrategy extends AbstractQueryStrategy {
 						.match(match -> match
 								.field("positiveTags.keyword")
 								.query(keyword)
-								.analyzer("standard")
+								.analyzer("nori_analyzer")
 								.fuzziness("2")
 								.prefixLength(2)
 						)
 				)
-				.scoreMode(ChildScoreMode.None)
 				.build()
 				._toQuery();
 

@@ -5,7 +5,8 @@
   "analysis": {
     "tokenizer": {
       "nori_tokenizer": {
-        "type": "nori_tokenizer"
+        "type": "nori_tokenizer",
+        "user_dictionary": "Cosmetic.txt"
       },
       "n_gram_tokenizer": {
         "type": "ngram",

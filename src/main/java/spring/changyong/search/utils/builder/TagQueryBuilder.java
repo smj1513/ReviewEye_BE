@@ -59,6 +59,7 @@ public class TagQueryBuilder {
 								.filter(QueryBuilders.match()
 										.field("positiveTags.keyword")
 										.query(tag)
+										.analyzer("nori_analyzer")
 										.fuzziness("2")
 										.prefixLength(2).build()._toQuery()
 								)

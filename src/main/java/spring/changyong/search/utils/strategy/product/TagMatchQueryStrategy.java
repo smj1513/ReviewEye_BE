@@ -1,8 +1,8 @@
 package spring.changyong.search.utils.strategy.product;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
-import spring.changyong.search.utils.strategy.QueryStrategy;
 
 public class TagMatchQueryStrategy extends AbstractQueryStrategy {
 	public TagMatchQueryStrategy(String query) {
@@ -12,11 +12,21 @@ public class TagMatchQueryStrategy extends AbstractQueryStrategy {
 	@Override
 	public Query buildQuery(String keyword) {
 		return QueryBuilders
-				.match()
-				.field("name")
-				.query(keyword)
-				.fuzziness("AUTO")
-				.build()
-				._toQuery();
+				.bool()
+				.should(QueryBuilders.term()
+						.field("name")
+						.value(keyword)
+						.boost(3.0F)
+						.build()
+						._toQuery()
+				)
+				.should(QueryBuilders
+						.match()
+						.field("name")
+						.operator(Operator.And)
+						.query(keyword)
+						.analyzer("n_gram_analyzer")
+						.build()
+						._toQuery()).build()._toQuery();
 	}
 }

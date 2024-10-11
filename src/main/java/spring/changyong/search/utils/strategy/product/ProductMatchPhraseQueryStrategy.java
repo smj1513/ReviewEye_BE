@@ -8,9 +8,10 @@ public class ProductMatchPhraseQueryStrategy implements QueryStrategy {
 	@Override
 	public Query buildQuery(String keyword) {
 		return QueryBuilders.matchPhrase()
-				.field("content")
+				.field("name")
 				.query(keyword)
-				.analyzer("standard")
-				.build()._toQuery();
+				.analyzer("n_gram_analyzer")
+				.build()
+				._toQuery();
 	}
 }

@@ -12,7 +12,6 @@ import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.model.Tag;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SearchResponse {
 
@@ -21,7 +20,7 @@ public class SearchResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Result<T> {
-		private Integer took;
+		private Long searchTimeMs;
 		private Slice<T> result;
 	}
 

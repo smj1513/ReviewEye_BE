@@ -9,10 +9,15 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StopWatch;
 import spring.changyong.search.domain.model.ProductDocument;
+import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ProductSearchQueryBuilder;
 import spring.changyong.search.utils.builder.TagQueryBuilder;
+import spring.changyong.timer.ExecutionTimeHolder;
+import spring.changyong.timer.aspect.ExeTimer;
 
 @Repository
 @Log4j2
@@ -20,7 +25,7 @@ import spring.changyong.search.utils.builder.TagQueryBuilder;
 public class ProductSearchRepositoryImpl implements CustomProductSearchRepository {
 
 	private final ElasticsearchOperations elasticsearchOperations;
-	private final ElasticsearchClient elasticsearchClient;
+	private final SearchUtils searchUtils;
 
 	@Override
 	public SearchHits<ProductDocument> searchByName(String nameKeyword, Pageable pageable) {
@@ -31,7 +36,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.addTermQuery()
 				.build(pageable);
 
-		SearchHits<ProductDocument> result = elasticsearchOperations.search(query, ProductDocument.class);
+		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);
 
 		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}", searchHit.getContent().getName(), searchHit.getScore()));
 		return result;
@@ -44,10 +49,16 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.addTagMatchQuery()
 				.build(pageable);
 
-		SearchHits<ProductDocument> result = elasticsearchOperations.search(nativeQuery, ProductDocument.class);
+		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(nativeQuery, ProductDocument.class);
 
 		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}, keyword:{}", searchHit.getContent().getName(), searchHit.getScore(), searchHit.getContent().getPositiveTags().toString()));
 		return result;
 	}
+
+	@Override
+	public void updateDocument(ProductDocument productDocument) {
+		elasticsearchOperations.update(productDocument);
+	}
+
 
 }

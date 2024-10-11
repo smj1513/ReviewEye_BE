@@ -13,13 +13,11 @@ public class ProductMultiMatchQueryStrategy implements QueryStrategy {
 	public Query buildQuery(String keyword) {
 		return QueryBuilders.multiMatch()
 				.query(keyword)
-				.fields(List.of("name", "brand"))
-				.type(TextQueryType.BestFields)
-				.autoGenerateSynonymsPhraseQuery(true)
+				.fields(List.of("name", "title"))
+				.analyzer("n_gram_analyzer")
 				.operator(Operator.And)
 				.tieBreaker(0.3)
 				.fuzziness("1")
-				.prefixLength(2)
 				.boost(2.0F)
 				.build()._toQuery();
 	}

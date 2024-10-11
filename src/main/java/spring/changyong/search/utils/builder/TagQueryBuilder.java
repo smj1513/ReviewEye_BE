@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
-import spring.changyong.search.utils.strategy.product.TagMatchQueryStrategy;
-import spring.changyong.search.utils.strategy.product.TagNestedQueryStrategy;
+import spring.changyong.search.utils.strategy.product.tag.TagMatchQueryStrategy;
+import spring.changyong.search.utils.strategy.product.tag.TagNestedQueryStrategy;
 
 import java.util.ArrayList;
 import java.util.List;

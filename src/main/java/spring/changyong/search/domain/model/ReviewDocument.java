@@ -6,7 +6,11 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Setting;
+import spring.changyong.common.api.code.ErrorCode;
+import spring.changyong.common.exception.BusinessLogicException;
 import spring.changyong.search.SearchProperties;
+
+import java.util.Map;
 
 @Document(indexName = "review")
 @Setting(settingPath = "elasticsearch/review-settings.json")

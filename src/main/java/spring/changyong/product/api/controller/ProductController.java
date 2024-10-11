@@ -12,6 +12,8 @@ import spring.changyong.docs.controller.ProductDocsController;
 import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.product.application.ProductAppService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class ProductController implements ProductDocsController {
 	@GetMapping("/{id}/detail")
 	public CommonResponse<ProductResponse.Detail> getProductDetail(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getProductDetail(id));
+	}
+
+	@GetMapping("/{id}/evaluation")
+	public CommonResponse<List<ProductResponse.Evaluation>> getProductEvaluation(@PathVariable String id) {
+		return CommonResponse.success(SuccessCode.OK, productAppService.getProductEvaluation(id));
 	}
 
 	@GetMapping("/{id}/positive-keywords")

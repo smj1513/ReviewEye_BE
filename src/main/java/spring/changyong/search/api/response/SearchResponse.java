@@ -5,15 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.model.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResponse {
+
+	private static final Logger log = LoggerFactory.getLogger(SearchResponse.class);
 
 	@Data
 	@Builder
@@ -42,12 +48,29 @@ public class SearchResponse {
 
 		@Schema(description = "썸네일 이미지", example = "http://image.com")
 		private String imageUrl;
-		private List<String> keywords;
 
-		@Schema(description = "검색결과의 관련성 점수", example = "4.8")
+		@Schema(description = "매칭된 태그", example = "촉촉하다")
+		private String matchedTag;
+
+		@Schema(description = "태그", example = "['촉촉하다', '진정']")
+		private List<String> tags;
+
+		@Schema(description = "검색결과의 관련성 점수 NaN일수도 있음", example = "4.8")
 		private Float score;
 
 		public static ProductResult from(SearchHit<ProductDocument> searchHit) {
+			SearchHits<?> positiveTags = searchHit.getInnerHits("positiveTags");
+			List<String> keywordList = new ArrayList<>(searchHit.getContent().getPositiveTags().stream().map(Tag::getKeyword).toList());
+			List<String> matchTagList = new ArrayList<>();
+
+			if (positiveTags != null) {
+				positiveTags.forEach(hits -> {
+					Tag content = (Tag) hits.getContent();
+					matchTagList.add(content.getKeyword());
+				});
+				keywordList.removeAll(matchTagList);
+				matchTagList.forEach(keywordList::addFirst);
+			}
 			return ProductResult
 					.builder()
 					.name(searchHit.getContent().getName())
@@ -56,7 +79,8 @@ public class SearchResponse {
 					.discountPrice(searchHit.getContent().getDiscountPrice())
 					.id(searchHit.getContent().getProductId())
 					.score(searchHit.getScore())
-					.keywords(searchHit.getContent().getPositiveTags().stream().map(Tag::getKeyword).toList())
+					.tags(keywordList.subList(0, 3))
+					.matchedTag(matchTagList.isEmpty() ? null : matchTagList.getFirst())
 					.build();
 		}
 	}

@@ -13,7 +13,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 import spring.changyong.search.domain.repository.ReviewSearchRepository;
-import spring.changyong.timer.ExecutionTimeHolder;
+import spring.changyong.search.utils.ExecutionTimeHolder;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -37,9 +37,6 @@ public class ReviewDocument {
 	@Field(name = "recommend", type = FieldType.Long)
 	private Long recommend;
 
-	@Field(name = "sentiment", type = FieldType.Long)
-	private Long sentiment;
-
 	@Field(name = "nickname", type = FieldType.Keyword)
 	private String nickname;
 

@@ -1,6 +1,7 @@
 package spring.changyong.product.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import spring.changyong.common.api.code.ErrorCode;
 import spring.changyong.common.exception.BusinessLogicException;
@@ -27,14 +28,14 @@ public class ProductAppService {
 	public ProductResponse.Detail getProductDetail(String id) {
 		ProductDocument product = productRepository.findByProductId(id)
 				.orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
-
+		List<String> keywords = product.getPositiveTags().stream().map(Tag::getKeyword).toList();
 		return ProductResponse.Detail.builder()
 				.id(product.getProductId())
 				.title(product.getName())
 				.brand(product.getBrand())
 				.productId(product.getProductId())
 				.thumbnail(product.getThumbnail())
-				.keywords(null)
+				.keywords(keywords)
 				.build();
 	}
 
@@ -55,7 +56,7 @@ public class ProductAppService {
 	}
 
 	public List<ProductResponse.Evaluation> getProductEvaluation(String id) {
-		List<ReviewDocument> reviews = reviewSearchRepository.findAllByProductId(id);
+		List<ReviewDocument> reviews = reviewSearchRepository.findAllByProductId(id, PageRequest.of(0,10000)).getContent();
 		Map<String, Map<String, Integer>> productEvaluation = productDomainService.getProductEvaluation(reviews);
 		List<ProductResponse.Evaluation> response = new ArrayList<>();
 

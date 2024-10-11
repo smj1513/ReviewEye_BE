@@ -35,6 +35,7 @@ public class ProductResponse {
 		private String thumbnail;
 
 		@Schema(description = "키워드", example = "['keyword1', 'keyword2']")
+		@Builder.Default
 		private List<String> keywords = new ArrayList<>();
 
 	}

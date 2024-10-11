@@ -1,23 +1,16 @@
 package spring.changyong.search.persistence.repository;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StopWatch;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ProductSearchQueryBuilder;
 import spring.changyong.search.utils.builder.TagQueryBuilder;
-import spring.changyong.timer.ExecutionTimeHolder;
-import spring.changyong.timer.aspect.ExeTimer;
 
 @Repository
 @Log4j2

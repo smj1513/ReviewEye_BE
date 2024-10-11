@@ -1,27 +1,14 @@
 package spring.changyong.search.persistence.repository;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.HighlightQuery;
-import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StopWatch;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ReviewSearchQueryBuilder;
-import spring.changyong.timer.ExecutionTimeHolder;
-import spring.changyong.timer.aspect.ExeTimer;
-
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor

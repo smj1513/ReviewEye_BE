@@ -21,7 +21,7 @@ public class ReviewResponse {
 		private String evaluation;
 		private Long star;
 		private Long recommend;
-		private boolean sentiment;
+	//	private boolean sentiment;
 
 		public static Result from(ReviewDocument review) {
 			return Result.builder()
@@ -32,7 +32,6 @@ public class ReviewResponse {
 					.evaluation(review.getEvaluation())
 					.star(review.getStar())
 					.recommend(review.getRecommend())
-					.sentiment(review.getSentiment() == 1) // 1이 긍정 0이 부정
 					.build();
 		}
 	}

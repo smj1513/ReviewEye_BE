@@ -6,7 +6,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import spring.changyong.timer.ExecutionTimeHolder;
 
 @Component
 @RequiredArgsConstructor

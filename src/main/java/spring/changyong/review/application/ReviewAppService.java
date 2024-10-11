@@ -2,6 +2,7 @@ package spring.changyong.review.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -21,9 +22,9 @@ public class ReviewAppService {
 	private final ProductSearchRepository productSearchRepository;
 
 	@Transactional(readOnly = true)
-	public Slice<ReviewResponse.Result> getProductReview(String id, int page, int size) {
+	public Page<ReviewResponse.Result> getProductReview(String id, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("star")));
-		Slice<ReviewDocument> result = reviewSearchRepository.findAllByProductId(id, pageRequest);
+		Page<ReviewDocument> result = reviewSearchRepository.findAllByProductId(id, pageRequest);
 		result.forEach(reviewDocument -> log.info("reviewDocument: {}", reviewDocument));
 		return result.map(ReviewResponse.Result::from);
 	}

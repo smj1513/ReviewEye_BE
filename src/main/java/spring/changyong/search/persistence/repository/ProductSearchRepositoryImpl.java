@@ -61,6 +61,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 					.withDocument(Document.create().fromJson(searchUtils.convertObjectToJson(doc)))
 					.build();
 			updateQueries.add(updateQuery);
+			log.info("updateQuery: {}", updateQuery);
 		});
 		elasticsearchOperations.bulkUpdate(updateQueries, ProductDocument.class);
 	}

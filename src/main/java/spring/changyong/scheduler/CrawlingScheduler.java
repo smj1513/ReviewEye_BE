@@ -28,7 +28,14 @@ public class CrawlingScheduler {
 	@Scheduled(cron = "0 0 3 * * ?")
 	public void updatePrice() throws Exception{
 		Iterable<ProductDocument> all = productSearchRepository.findAll();
-		all.forEach(crawlingService::updateProduct);
+		all.forEach(doc->{
+			crawlingService.updateProduct(doc);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		});
 		productSearchRepository.updateDocuments(all);
 	}
 }

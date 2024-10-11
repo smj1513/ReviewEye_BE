@@ -1,6 +1,7 @@
 package spring.changyong.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class CrawlingService {
 	private final RestTemplate restTemplate;
@@ -29,6 +31,7 @@ public class CrawlingService {
 		Optional.ofNullable(exchange.getBody()).ifPresent(priceResponse -> {
 			productDocument.setPrice(priceResponse.getPrice());
 			productDocument.setDiscountPrice(priceResponse.getDiscountPrice());
+			log.info("productDocument: {}", productDocument);
 		});
 	}
 }

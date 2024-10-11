@@ -1,5 +1,5 @@
 crawling:
-  base-url: http://localhost:8020
+  base-url: http://mirror.ajb.kr:8020
 
 spring:
   data:

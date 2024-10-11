@@ -1,6 +1,7 @@
 package spring.changyong.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.http.HttpMethod;
@@ -11,24 +12,23 @@ import org.springframework.web.client.RestTemplate;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class CrawlingScheduler {
 
-	private final RestTemplate restTemplate;
 	private final ProductSearchRepository productSearchRepository;
 
-	@Value("${crawling.base-url}")
-	private String crawlingUrl;
+	private final CrawlingService crawlingService;
+
 
 	@Scheduled(cron = "0 0 3 * * ?")
-	public void updatePrice() {
+	public void updatePrice() throws Exception{
 		Iterable<ProductDocument> all = productSearchRepository.findAll();
-
-		all.forEach(doc->{
-
-		});
+		all.forEach(crawlingService::updateProduct);
+		productSearchRepository.updateDocuments(all);
 	}
 }

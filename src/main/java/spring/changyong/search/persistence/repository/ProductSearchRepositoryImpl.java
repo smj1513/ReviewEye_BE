@@ -43,7 +43,6 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(nativeQuery, ProductDocument.class);
-
 		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}, keyword:{}", searchHit.getContent().getName(), searchHit.getScore(), searchHit.getContent().getPositiveTags().toString()));
 		return result;
 	}

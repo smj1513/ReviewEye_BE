@@ -51,12 +51,12 @@ public class ProductDocument {
 	@Field(type = FieldType.Keyword)
 	private String thumbnail;
 
-	@Field(type = FieldType.Nested, includeInParent = true)
+	@Field(type = FieldType.Nested)
 	@Builder.Default
 	private List<Tag> positiveTags = new ArrayList<>();
 
 
-	@Field(type = FieldType.Nested,termVector = TermVector.with_positions_payloads)
+	@Field(type = FieldType.Nested)
 	@Builder.Default
 	private List<Tag> negativeTags = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package spring.changyong.search.utils.strategy.product.tag;
 
+import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
@@ -22,8 +23,9 @@ public class TagNestedQueryStrategy extends AbstractQueryStrategy {
 								.prefixLength(2)
 						)
 				)
+				.innerHits(in->in)
 				.build()
 				._toQuery();
-
 	}
 }
+

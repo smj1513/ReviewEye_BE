@@ -7,4 +7,5 @@ import spring.changyong.search.domain.model.ProductDocument;
 public interface CustomProductSearchRepository {
 	SearchHits<ProductDocument> searchByName(String name, Pageable pageable);
 	SearchHits<ProductDocument> searchByTag(String keyword, Pageable pageable);
+	void updateDocument(ProductDocument productDocument);
 }

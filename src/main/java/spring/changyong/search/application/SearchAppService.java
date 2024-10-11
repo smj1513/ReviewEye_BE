@@ -13,6 +13,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 import spring.changyong.search.domain.repository.ReviewSearchRepository;
+import spring.changyong.timer.ExecutionTimeHolder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class SearchAppService {
 	private final ProductSearchRepository productSearchRepository;
 	private final ReviewSearchRepository reviewSearchRepository;
 
-	public Slice<SearchResponse.ProductResult> searchProductByKeyword(String keyword, int page, int size) {
+	public SearchResponse.Result<SearchResponse.ProductResult> searchProductByKeyword(String keyword, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ProductDocument> result = productSearchRepository.searchByTag(keyword, pageRequest);
@@ -35,10 +36,14 @@ public class SearchAppService {
 				.toList();
 
 		boolean hasNext = result.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
-		return new SliceImpl<>(productResultList, pageRequest, hasNext);
+		Long searchTime = ExecutionTimeHolder.get();
+		ExecutionTimeHolder.clear();
+		Slice<SearchResponse.ProductResult> productResults = new SliceImpl<>(productResultList, pageRequest, hasNext);
+
+		return new SearchResponse.Result<>(searchTime, productResults);
 	}
 
-	public Slice<SearchResponse.ProductResult> searchProductByName(String name, int page, int size) {
+	public SearchResponse.Result<SearchResponse.ProductResult> searchProductByName(String name, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ProductDocument> result = productSearchRepository.searchByName(name, pageRequest);
@@ -49,11 +54,13 @@ public class SearchAppService {
 				.collect(Collectors.toList());
 
 		boolean hasNext = result.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
-
-		return new SliceImpl<>(productResultList, pageRequest, hasNext);
+		Slice<SearchResponse.ProductResult> productResults = new SliceImpl<>(productResultList, pageRequest, hasNext);
+		Long searchTime = ExecutionTimeHolder.get();
+		ExecutionTimeHolder.clear();
+		return new SearchResponse.Result<>(searchTime, productResults);
 	}
 
-	public Slice<SearchResponse.ReviewResult> searchReviewByProductId(String id, String keyword, int page, int size) {
+	public SearchResponse.Result<SearchResponse.ReviewResult> searchReviewByProductId(String id, String keyword, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
 		SearchHits<ReviewDocument> searchHits = reviewSearchRepository.searchByProductId(id, keyword, pageRequest);
@@ -63,8 +70,10 @@ public class SearchAppService {
 				.toList();
 
 		boolean hasNext = searchHits.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
-
-		return new SliceImpl<>(reviewResultList, pageRequest, hasNext);
+		Slice<SearchResponse.ReviewResult> reviewResults = new SliceImpl<>(reviewResultList, pageRequest, hasNext);
+		Long searchTime = ExecutionTimeHolder.get();
+		ExecutionTimeHolder.clear();
+		return new SearchResponse.Result<>(searchTime, reviewResults);
 	}
 
 	public Slice<SearchResponse.AutoComplete> autoCompleteQuery(String query, int page, int size) {

@@ -1,8 +1,9 @@
-package spring.changyong.search.utils.strategy.product;
+package spring.changyong.search.utils.strategy.product.tag;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
 
 public class TagMatchQueryStrategy extends AbstractQueryStrategy {
 	public TagMatchQueryStrategy(String query) {

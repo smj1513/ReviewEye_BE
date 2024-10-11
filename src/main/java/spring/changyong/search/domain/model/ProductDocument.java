@@ -27,6 +27,9 @@ public class ProductDocument {
 	@Field(type = FieldType.Text, analyzer = "n_gram_analyzer")
 	private String name;
 
+	@Field(type = FieldType.Text, analyzer = "standard")
+	private String title;
+
 	@Field(type = FieldType.Integer, name = "price")
 	private Integer price;
 

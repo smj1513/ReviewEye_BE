@@ -8,8 +8,9 @@ public class ProductTermQueryStrategy implements QueryStrategy {
 	@Override
 	public Query buildQuery(String keyword) {
 		return QueryBuilders.term()
-				.field("name")
+				.field("title")
 				.value(keyword)
+				.boost(3.0F)
 				.build()._toQuery();
 	}
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductResponse {
@@ -34,7 +35,7 @@ public class ProductResponse {
 		private String thumbnail;
 
 		@Schema(description = "키워드", example = "['keyword1', 'keyword2']")
-		private List<String> keywords;
+		private List<String> keywords = new ArrayList<>();
 
 	}
 
@@ -45,8 +46,9 @@ public class ProductResponse {
 	@Schema(title = "상품 긍정 키워드 조회 응답")
 	public static class PositiveKeyword {
 
+		@Builder.Default
 		@Schema(description = "긍정 키워드", example = "['keyword1', 'keyword2']")
-		private List<String> keywords;
+		private List<String> keywords = new ArrayList<>();
 	}
 
 	@Data
@@ -56,7 +58,34 @@ public class ProductResponse {
 	@Schema(title = "상품 부정 키워드 조회 응답")
 	public static class NegativeKeyword {
 
+		@Builder.Default
 		@Schema(description = "부정 키워드", example = "['keyword1', 'keyword2']")
-		private List<String> keywords;
+		private List<String> keywords = new ArrayList<>();
+	}
+
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Schema(title = "상품 평가 조회 응답")
+	public static class Evaluation {
+		@Schema(description = "평가 항목", example = "피부 타입")
+		private String title;
+		@Builder.Default
+		@Schema(description = "평가 상세", example = "[{'content':'건성', 'count':10}, {'content':'지성', 'count':20}]")
+		private List<EvaluationDetails> evaluationDetails = new ArrayList<>();
+	}
+
+
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Schema(title = "상품 평가 상세")
+	public static class EvaluationDetails{
+		@Schema(description = "평가 내용", example = "건성에 좋아요")
+		private String content;
+		@Schema(description = "평가 수", example = "823")
+		private Integer count;
 	}
 }

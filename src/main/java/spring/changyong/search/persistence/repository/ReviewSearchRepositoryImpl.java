@@ -6,14 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StopWatch;
 import spring.changyong.search.domain.model.ReviewDocument;
+import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ReviewSearchQueryBuilder;
+import spring.changyong.timer.ExecutionTimeHolder;
+import spring.changyong.timer.aspect.ExeTimer;
 
 import java.util.List;
 
@@ -21,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository {
 	private final ElasticsearchOperations elasticsearchOperations;
+	private final SearchUtils searchUtils;
 
 
 	@Override
@@ -32,9 +39,8 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 				.addMatchPhraseQuery();
 
 		NativeQuery nativeQuery = queryBuilder.build(pageable);
-		return elasticsearchOperations.search(nativeQuery, ReviewDocument.class);
+		return searchUtils.searchWithTimer(nativeQuery, ReviewDocument.class);
 	}
-
 	/*
 	* NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
 		HighlightField highlightField = new HighlightField("review",

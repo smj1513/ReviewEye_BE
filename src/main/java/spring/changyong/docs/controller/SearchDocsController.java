@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,9 +50,9 @@ public interface SearchDocsController {
 
 	@Operation(summary = "상품명 자동완성", description = "상품명 자동완성")
 	@ApiResponse(responseCode = "200", description = "성공")
-	CommonResponse<Slice<SearchResponse.AutoComplete>> autoCompleteQuery(
+	CommonResponse<Page<SearchResponse.AutoComplete>> autoCompleteQuery(
 			@Parameter(description = "검색어")
-			@RequestParam String query,
+			@RequestParam String prefix,
 			@Parameter(description = "페이지 번호 - 0번부터 시작")
 			@RequestParam(defaultValue = "0") int page,
 			@Parameter(description = "페이지 크기")

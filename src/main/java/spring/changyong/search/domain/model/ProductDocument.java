@@ -1,5 +1,6 @@
 package spring.changyong.search.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
@@ -21,6 +22,7 @@ public class ProductDocument {
 	@Field(name = "id", type = FieldType.Long)
 	private Long id;
 
+	@JsonProperty("product_id")
 	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
@@ -33,6 +35,7 @@ public class ProductDocument {
 	@Field(type = FieldType.Integer, name = "price")
 	private Integer price;
 
+	@JsonProperty("discount_price")
 	@Field(type = FieldType.Integer, name = "discount_price")
 	private Integer discountPrice;
 

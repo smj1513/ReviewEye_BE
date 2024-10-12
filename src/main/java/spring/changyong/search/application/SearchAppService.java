@@ -80,7 +80,7 @@ public class SearchAppService {
 	public Page<SearchResponse.AutoComplete> autoCompleteQuery(String prefix, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
-		Page<ProductDocument> autoCompleteDocument = productSearchRepository.findByNameStartingWith(prefix.replace(" ",""), pageRequest);
+		Page<ProductDocument> autoCompleteDocument = productSearchRepository.findByTitleStartingWith(prefix.replace(" ",""), pageRequest);
 
 
 		return autoCompleteDocument.map(doc-> SearchResponse.AutoComplete.builder()

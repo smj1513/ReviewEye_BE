@@ -2,6 +2,7 @@ package spring.changyong.search.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -76,7 +77,14 @@ public class SearchAppService {
 		return new SearchResponse.Result<>(searchTime, reviewResults);
 	}
 
-	public Slice<SearchResponse.AutoComplete> autoCompleteQuery(String query, int page, int size) {
-		return null;
+	public Page<SearchResponse.AutoComplete> autoCompleteQuery(String prefix, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+
+		Page<ProductDocument> autoCompleteDocument = productSearchRepository.findByNameStartingWith(prefix.replace(" ",""), pageRequest);
+
+
+		return autoCompleteDocument.map(doc-> SearchResponse.AutoComplete.builder()
+				.productName(doc.getName())
+				.build());
 	}
 }

@@ -1,6 +1,7 @@
 package spring.changyong.search.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,9 +42,9 @@ public class SearchController implements SearchDocsController {
 	}
 
 	@GetMapping("/products/name/auto-complete")
-	public CommonResponse<Slice<SearchResponse.AutoComplete>> autoCompleteQuery(@RequestParam String query,
+	public CommonResponse<Page<SearchResponse.AutoComplete>> autoCompleteQuery(@RequestParam String prefix,
 	                                                                           @RequestParam(defaultValue = "0") int page,
 	                                                                           @RequestParam(defaultValue = "10") int size) {
-		return CommonResponse.success(SuccessCode.OK, searchService.autoCompleteQuery(query, page, size));
+		return CommonResponse.success(SuccessCode.OK, searchService.autoCompleteQuery(prefix, page, size));
 	}
 }

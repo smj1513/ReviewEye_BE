@@ -27,7 +27,6 @@ public class CrawlingScheduler {
 
 		for (ProductDocument doc : all) {
 			crawlingService.updateProduct(doc);
-			log.info("productDocument: {}", doc.getProductId());
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {

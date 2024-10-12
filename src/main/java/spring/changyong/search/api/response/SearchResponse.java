@@ -130,6 +130,6 @@ public class SearchResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class AutoComplete {
-		private List<String> productNames;
+		private String productName;
 	}
 }

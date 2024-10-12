@@ -31,7 +31,6 @@ public class CrawlingService {
 		Optional.ofNullable(exchange.getBody()).ifPresent(priceResponse -> {
 			productDocument.setPrice(priceResponse.getPrice());
 			productDocument.setDiscountPrice(priceResponse.getDiscountPrice());
-			log.info("productDocument: {}", productDocument);
 		});
 	}
 }

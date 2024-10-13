@@ -27,8 +27,12 @@ public class ProductResponse {
 		@Schema(description = "브랜드", example = "Apple")
 		private String brand;
 
-		@Schema(description = "가격", example = "1,000,000")
-		private String productId;
+
+		@Schema(description = "가격", example = "900,000")
+		private Integer price;
+
+		@Schema(description = "할인 가격", example = "900,000")
+		private Integer discountPrice;
 
 
 		@Schema(description = "상품 이미지 URL", example = "http://image.com")

@@ -33,7 +33,8 @@ public class ProductAppService {
 				.id(product.getProductId())
 				.title(product.getName())
 				.brand(product.getBrand())
-				.productId(product.getProductId())
+				.price(product.getPrice())
+				.discountPrice(product.getDiscountPrice())
 				.thumbnail(product.getThumbnail())
 				.keywords(keywords)
 				.build();

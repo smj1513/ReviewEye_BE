@@ -13,18 +13,18 @@ public class ProductMatchQueryStrategy implements QueryStrategy {
 						.query(keyword)
 						.analyzer("n_gram_analyzer")
 						.operator(Operator.And)
-						.prefixLength(2)
 						.fuzziness("AUTO")
-						.build()._toQuery()
-				)
-				.should(QueryBuilders
-						.match()
+						.boost(1.0F)
+						.build()._toQuery())
+				.should(QueryBuilders.match()
 						.field("title")
-						.analyzer("n_gram_analyzer")
-						.fuzziness("AUTO")
-						.prefixLength(2)
 						.query(keyword)
-						.build()._toQuery()
-				).minimumShouldMatch("1").boost(2.0F).build()._toQuery();
+						.operator(Operator.And)
+						.analyzer("nori_analyzer")
+						.fuzziness("2").boost(0.5F).build()._toQuery()
+				)
+				.minimumShouldMatch("1")
+				.build()
+				._toQuery();
 	}
 }

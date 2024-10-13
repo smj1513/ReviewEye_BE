@@ -29,8 +29,10 @@ public class CrawlingService {
 		URI uri = URI.create(baseUrl+"/get_price/" + productDocument.getProductId());
 		ResponseEntity<PriceResponse> exchange = restTemplate.exchange(uri, HttpMethod.GET, null, PriceResponse.class);
 		Optional.ofNullable(exchange.getBody()).ifPresent(priceResponse -> {
-			productDocument.setPrice(priceResponse.getPrice());
-			productDocument.setDiscountPrice(priceResponse.getDiscountPrice());
+			Integer price = priceResponse.getPrice();
+			Integer discountPrice = priceResponse.getDiscountPrice();
+			productDocument.setPrice(price == null ? 0 : price);
+			productDocument.setDiscountPrice(discountPrice == null ? 0 : discountPrice);
 		});
 	}
 }

@@ -76,6 +76,7 @@ public class ProductResponse {
 	public static class Keyword{
 		private String keyword;
 		private double percentage;
+		private int count;
 	}
 
 	@Data

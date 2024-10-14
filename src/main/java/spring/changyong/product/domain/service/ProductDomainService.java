@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import spring.changyong.common.api.code.ErrorCode;
-import spring.changyong.common.exception.BusinessLogicException;
 import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.model.Tag;
@@ -13,7 +11,6 @@ import spring.changyong.search.domain.model.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +38,14 @@ public class ProductDomainService {
 		return evaluationMap;
 	}
 
-	public List<ProductResponse.Keyword> changeCountPercentage(List<Tag> tags) {
+	public List<ProductResponse.Keyword> changeCountToPercentage(List<Tag> tags) {
 		List<Tag> newTags = tags.size() < 10 ? tags : tags.subList(0, 10);
-		int total = newTags.stream().mapToInt(Tag::getCount).max().getAsInt();
+		int max = newTags.stream().mapToInt(Tag::getCount).max().orElseGet(() -> 1);
 		return newTags.stream().map(newTag -> {
 			return ProductResponse.Keyword.builder()
 					.keyword(newTag.getKeyword())
-					.percentage((double) newTag.getCount() / total * 100)
+					.percentage((double) newTag.getCount() / max * 100)
+					.count(newTag.getCount())
 					.build();
 		}).toList();
 	}

@@ -10,9 +10,9 @@ public class ReviewMatchPhraseQueryStrategy implements QueryStrategy {
 		return QueryBuilders.matchPhrase()
 				.field("review")
 				.query(keyword)
-				.slop(1)
+				.slop(0)
 				.boost(1F)
-				.analyzer("nori_analyzer")
+				.analyzer("standard")
 				.build()._toQuery();
 	}
 }

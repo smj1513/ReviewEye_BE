@@ -23,7 +23,7 @@ public class ReviewAppService {
 
 	@Transactional(readOnly = true)
 	public Page<ReviewResponse.Result> getProductReview(String id, int page, int size) {
-		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("star")));
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date")));
 		Page<ReviewDocument> result = reviewSearchRepository.findAllByProductId(id, pageRequest);
 		result.forEach(reviewDocument -> log.info("reviewDocument: {}", reviewDocument));
 		return result.map(ReviewResponse.Result::from);

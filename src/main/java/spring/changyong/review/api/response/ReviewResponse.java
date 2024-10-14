@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import spring.changyong.search.domain.model.ReviewDocument;
 
+import java.time.LocalDate;
+
 public class ReviewResponse {
 	@Data
 	@Builder
@@ -21,6 +23,7 @@ public class ReviewResponse {
 		private String evaluation;
 		private Long star;
 		private Long recommend;
+		private LocalDate createdAt;
 	//	private boolean sentiment;
 
 		public static Result from(ReviewDocument review) {
@@ -32,6 +35,7 @@ public class ReviewResponse {
 					.evaluation(review.getEvaluation())
 					.star(review.getStar())
 					.recommend(review.getRecommend())
+					.createdAt(review.getDate())
 					.build();
 		}
 	}

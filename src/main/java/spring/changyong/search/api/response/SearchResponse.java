@@ -14,6 +14,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.model.Tag;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,14 +101,14 @@ public class SearchResponse {
 		private Long star;
 		@Schema(description = "추천수", example = "10")
 		private Long recommend;
-		@Schema(description = "긍부정 정보", example = "true")
-		private boolean sentiment;
 		@Schema(description = "닉네임", example = "테스터")
 		private String nickname;
 		@Schema(description = "피부 정보", example = "건성")
 		private String userSkinInfo;
 		@Schema(description = "평가", example = "좋아요")
 		private String evaluation;
+
+		private LocalDate createdAt;
 
 		public static ReviewResult from(SearchHit<ReviewDocument> searchHit) {
 			return ReviewResult
@@ -117,10 +118,10 @@ public class SearchResponse {
 					.content(searchHit.getHighlightField("review").getFirst())
 					.star(searchHit.getContent().getStar())
 					.recommend(searchHit.getContent().getRecommend())
-					.sentiment(false)
 					.nickname(searchHit.getContent().getNickname())
 					.userSkinInfo(searchHit.getContent().getUserSkinInfo())
 					.evaluation(searchHit.getContent().getEvaluation())
+					.createdAt(searchHit.getContent().getDate())
 					.build();
 		}
 	}

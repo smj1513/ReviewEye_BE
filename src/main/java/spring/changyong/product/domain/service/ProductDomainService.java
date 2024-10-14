@@ -2,6 +2,8 @@ package spring.changyong.product.domain.service;
 
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import spring.changyong.common.api.code.ErrorCode;
 import spring.changyong.common.exception.BusinessLogicException;
@@ -12,30 +14,37 @@ import spring.changyong.search.persistence.repository.ReviewSearchRepositoryImpl
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductDomainService {
 
+	private static final Logger log = LoggerFactory.getLogger(ProductDomainService.class);
+
 	public Map<String, Map<String, Integer>> getProductEvaluation(List<ReviewDocument> reviewDocuments) {
 		Map<String, Map<String, Integer>> evaluationMap = new HashMap<>();
-		Map<String, Integer> skinTypeCount = new HashMap<>();
-		reviewDocuments.forEach(review->{
-			String[] split = review.getEvaluation().split(",");
-			if (split.length < 1) {
+		Map<String, Integer> skinTypeCount;
+
+		for (ReviewDocument review : reviewDocuments) {
+			String[] evaluations = Optional.ofNullable(review.getEvaluation()).orElseThrow(()->new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.")).split(",");
+			if (evaluations.length < 1) {
 				throw new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.");
 			}
-			for (String evDetails : split) {
-				String[] split1 = evDetails.split(":");
-				if (split1.length < 1) {
+			for (String evDetails : evaluations) {
+				String[] evDetail = evDetails.split(":");
+				if (evDetail.length < 1) {
 					throw new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.");
 				}
-				String evType = split1[0];
-				String evValue = split1[1];
+				String evType = evDetail[0];
+				String evValue = evDetail[1];
+				skinTypeCount = evaluationMap.getOrDefault(evType, new HashMap<>());
+
 				skinTypeCount.put(evValue, skinTypeCount.getOrDefault(evValue, 0) + 1);
 				evaluationMap.put(evType, skinTypeCount);
 			}
-		});
+		}
+		log.info("evaluationMap: {}", evaluationMap);
 		return evaluationMap;
 	}
 }

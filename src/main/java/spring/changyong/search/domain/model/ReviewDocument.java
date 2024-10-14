@@ -10,6 +10,7 @@ import spring.changyong.common.api.code.ErrorCode;
 import spring.changyong.common.exception.BusinessLogicException;
 import spring.changyong.search.SearchProperties;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @Document(indexName = "review")
@@ -46,4 +47,6 @@ public class ReviewDocument {
 	@Field(name = "evaluation", type = FieldType.Text)
 	private String evaluation;
 
+	@Field(name = "date", type = FieldType.Date, pattern = "yyyy.MM.dd")
+	private LocalDate date;
 }

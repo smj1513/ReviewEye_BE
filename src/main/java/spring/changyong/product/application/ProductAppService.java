@@ -44,15 +44,15 @@ public class ProductAppService {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
 		List<Tag> positiveTags = productDocument.getPositiveTags();
 		return ProductResponse.PositiveKeyword.builder()
-				.keywords(positiveTags.stream().map(Tag::getKeyword).toList())
+				.keywords(positiveTags)
 				.build();
 	}
 
 	public ProductResponse.NegativeKeyword getNegativeKeyword(String id) {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
-		List<Tag> positiveTags = productDocument.getNegativeTags();
+		List<Tag> negativeTags = productDocument.getNegativeTags();
 		return ProductResponse.NegativeKeyword.builder()
-				.keywords(positiveTags.stream().map(Tag::getKeyword).toList())
+				.keywords(negativeTags)
 				.build();
 	}
 

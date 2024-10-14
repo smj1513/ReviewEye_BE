@@ -42,12 +42,12 @@ public class ProductDomainService {
 	}
 
 	public List<ProductResponse.Keyword> changeCountPercentage(List<Tag> tags) {
-		tags = tags.size() < 10 ? tags : tags.subList(0, 10);
-		int total = tags.stream().mapToInt(Tag::getCount).sum();
-		return tags.stream().map(tag -> {
+		List<Tag> newTags = tags.size() < 10 ? tags : tags.subList(0, 10);
+		int total = newTags.stream().mapToInt(Tag::getCount).max().getAsInt();
+		return newTags.stream().map(newTag -> {
 			return ProductResponse.Keyword.builder()
-					.keyword(tag.getKeyword())
-					.percentage((double) tag.getCount() / total * 100)
+					.keyword(newTag.getKeyword())
+					.percentage((double) newTag.getCount() / total * 100)
 					.build();
 		}).toList();
 	}

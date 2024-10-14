@@ -44,7 +44,7 @@ public class ProductAppService {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
 		List<Tag> positiveTags = productDocument.getPositiveTags();
 		return ProductResponse.PositiveKeyword.builder()
-				.keywords(positiveTags)
+				.keywords(productDomainService.changeCountPercentage(positiveTags))
 				.build();
 	}
 
@@ -52,7 +52,7 @@ public class ProductAppService {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
 		List<Tag> negativeTags = productDocument.getNegativeTags();
 		return ProductResponse.NegativeKeyword.builder()
-				.keywords(negativeTags)
+				.keywords(productDomainService.changeCountPercentage(negativeTags))
 				.build();
 	}
 

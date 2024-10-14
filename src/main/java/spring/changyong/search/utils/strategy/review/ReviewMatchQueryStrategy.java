@@ -1,5 +1,6 @@
 package spring.changyong.search.utils.strategy.review;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import spring.changyong.search.utils.strategy.QueryStrategy;
@@ -11,7 +12,9 @@ public class ReviewMatchQueryStrategy implements QueryStrategy {
 				.field("review")
 				.analyzer("nori_analyzer")
 				.query(keyword)
-				.fuzziness("1")
+				.fuzziness("AUTO")
+				.prefixLength(2)
+				.operator(Operator.And)
 				.boost(2F)
 				.build()._toQuery();
 	}

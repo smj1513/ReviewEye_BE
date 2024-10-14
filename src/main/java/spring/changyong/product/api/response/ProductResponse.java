@@ -54,7 +54,7 @@ public class ProductResponse {
 
 		@Builder.Default
 		@Schema(description = "긍정 키워드", example = "['keyword1', 'keyword2']")
-		private List<Tag> keywords = new ArrayList<>();
+		private List<Keyword> keywords = new ArrayList<>();
 	}
 
 	@Data
@@ -66,7 +66,16 @@ public class ProductResponse {
 
 		@Builder.Default
 		@Schema(description = "부정 키워드", example = "['keyword1', 'keyword2']")
-		private List<Tag> keywords = new ArrayList<>();
+		private List<Keyword> keywords = new ArrayList<>();
+	}
+
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Keyword{
+		private String keyword;
+		private double percentage;
 	}
 
 	@Data

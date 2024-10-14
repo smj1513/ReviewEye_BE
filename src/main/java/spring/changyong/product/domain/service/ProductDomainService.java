@@ -1,15 +1,14 @@
 package spring.changyong.product.domain.service;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import spring.changyong.common.api.code.ErrorCode;
 import spring.changyong.common.exception.BusinessLogicException;
+import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.search.domain.model.ReviewDocument;
-import spring.changyong.search.domain.repository.ReviewSearchRepository;
-import spring.changyong.search.persistence.repository.ReviewSearchRepositoryImpl;
+import spring.changyong.search.domain.model.Tag;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,24 +26,28 @@ public class ProductDomainService {
 		Map<String, Integer> skinTypeCount;
 
 		for (ReviewDocument review : reviewDocuments) {
-			String[] evaluations = Optional.ofNullable(review.getEvaluation()).orElseThrow(()->new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.")).split(",");
-			if (evaluations.length < 1) {
-				throw new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.");
-			}
-			for (String evDetails : evaluations) {
-				String[] evDetail = evDetails.split(":");
-				if (evDetail.length < 1) {
-					throw new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "평가를 찾을 수 없습니다.");
+			if (review.getEvaluation() != null) {
+				String[] evaluations = review.getEvaluation().split(",");
+				for (String evDetails : evaluations) {
+					String[] evDetail = evDetails.split(":");
+					String evType = evDetail[0];
+					String evValue = evDetail[1];
+					skinTypeCount = evaluationMap.getOrDefault(evType, new HashMap<>());
+					skinTypeCount.put(evValue, skinTypeCount.getOrDefault(evValue, 0) + 1);
+					evaluationMap.put(evType, skinTypeCount);
 				}
-				String evType = evDetail[0];
-				String evValue = evDetail[1];
-				skinTypeCount = evaluationMap.getOrDefault(evType, new HashMap<>());
-
-				skinTypeCount.put(evValue, skinTypeCount.getOrDefault(evValue, 0) + 1);
-				evaluationMap.put(evType, skinTypeCount);
 			}
 		}
-		log.info("evaluationMap: {}", evaluationMap);
 		return evaluationMap;
+	}
+
+	public List<ProductResponse.Keyword> changeCountPercentage(List<Tag> tags) {
+		int total = tags.subList(0, 9).stream().mapToInt(Tag::getCount).sum();
+		return tags.stream().map(tag -> {
+			return ProductResponse.Keyword.builder()
+					.keyword(tag.getKeyword())
+					.percentage((double) tag.getCount() / total * 100)
+					.build();
+		}).toList();
 	}
 }

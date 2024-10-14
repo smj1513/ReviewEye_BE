@@ -22,8 +22,7 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 		ReviewSearchQueryBuilder queryBuilder = new ReviewSearchQueryBuilder(id, keyword)
 				.addProductIdFilter()
 				.addTermQuery()
-				.addMatchQuery()
-				.addMatchPhraseQuery();
+				.addMatchQuery();
 
 		NativeQuery nativeQuery = queryBuilder.build(pageable);
 		return searchUtils.searchWithTimer(nativeQuery, ReviewDocument.class);

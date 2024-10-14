@@ -42,7 +42,8 @@ public class ProductDomainService {
 	}
 
 	public List<ProductResponse.Keyword> changeCountPercentage(List<Tag> tags) {
-		int total = tags.subList(0, 9).stream().mapToInt(Tag::getCount).sum();
+		tags = tags.size() < 10 ? tags : tags.subList(0, 10);
+		int total = tags.stream().mapToInt(Tag::getCount).sum();
 		return tags.stream().map(tag -> {
 			return ProductResponse.Keyword.builder()
 					.keyword(tag.getKeyword())

@@ -20,7 +20,6 @@ public class CrawlingScheduler {
 
 	private final CrawlingService crawlingService;
 
-
 	@Scheduled(cron = "0 0 3 * * ?")
 	public void updatePrice() throws Exception{
 		Iterable<ProductDocument> all = productSearchRepository.findAll();
@@ -31,7 +30,6 @@ public class CrawlingScheduler {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				log.error(e.getMessage());
-				throw new BusinessLogicException(ErrorCode.INTENAL_SERVER_ERROR,e.getMessage());
 			}
 		}
 		productSearchRepository.updateDocuments(all);

@@ -13,6 +13,9 @@ import spring.changyong.docs.controller.SearchDocsController;
 import spring.changyong.search.api.response.SearchResponse;
 import spring.changyong.search.application.SearchAppService;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 @RequiredArgsConstructor
 public class SearchController implements SearchDocsController {
@@ -23,14 +26,14 @@ public class SearchController implements SearchDocsController {
 	public CommonResponse<SearchResponse.Result<SearchResponse.ProductResult>> searchProductByKeyword(@RequestParam String keyword,
 	                                                                                  @RequestParam(defaultValue = "0") int page,
 	                                                                                  @RequestParam(defaultValue = "10") int size) {
-		return CommonResponse.success(SuccessCode.OK, searchService.searchProductByKeyword(keyword, page, size));
+		return CommonResponse.success(SuccessCode.OK, searchService.searchProductByKeyword(URLDecoder.decode(keyword, StandardCharsets.UTF_8), page, size));
 	}
 
 	@GetMapping("/products/name/search")
 	public CommonResponse<SearchResponse.Result<SearchResponse.ProductResult>> searchProductByName(@RequestParam String name,
 	                                                                               @RequestParam(defaultValue = "0") int page,
 	                                                                               @RequestParam(defaultValue = "10") int size) {
-		return CommonResponse.success(SuccessCode.OK, searchService.searchProductByName(name, page, size));
+		return CommonResponse.success(SuccessCode.OK, searchService.searchProductByName(URLDecoder.decode(name, StandardCharsets.UTF_8), page, size));
 	}
 
 	@GetMapping("/products/{id}/reviews/search")
@@ -38,13 +41,13 @@ public class SearchController implements SearchDocsController {
 	                                                                       @RequestParam String keyword,
 	                                                                       @RequestParam(defaultValue = "0") int page,
 	                                                                       @RequestParam(defaultValue = "10") int size) {
-		return CommonResponse.success(SuccessCode.OK, searchService.searchReviewByProductId(id, keyword, page, size));
+		return CommonResponse.success(SuccessCode.OK, searchService.searchReviewByProductId(id, URLDecoder.decode(keyword, StandardCharsets.UTF_8), page, size));
 	}
 
 	@GetMapping("/products/name/auto-complete")
 	public CommonResponse<Page<SearchResponse.AutoComplete>> autoCompleteQuery(@RequestParam String prefix,
 	                                                                           @RequestParam(defaultValue = "0") int page,
 	                                                                           @RequestParam(defaultValue = "10") int size) {
-		return CommonResponse.success(SuccessCode.OK, searchService.autoCompleteQuery(prefix, page, size));
+		return CommonResponse.success(SuccessCode.OK, searchService.autoCompleteQuery(URLDecoder.decode(prefix, StandardCharsets.UTF_8), page, size));
 	}
 }

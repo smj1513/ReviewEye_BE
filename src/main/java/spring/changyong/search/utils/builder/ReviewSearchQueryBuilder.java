@@ -75,6 +75,7 @@ public class ReviewSearchQueryBuilder {
 	private HighlightQuery createHighlightQuery() {
 		HighlightField highlightField = new HighlightField("review",
 				HighlightFieldParameters.builder()
+						.withNumberOfFragments(0)
 						.withPreTags("<strong backgroundColor='yellow'>")
 						.withPostTags("</strong>")
 						.build());

@@ -9,7 +9,6 @@ spring:
     url: jdbc:mysql://mirror.ajb.kr:3306/oliveyoung
     username: "oliveyoung_user"
     password: "oliv3296"
-
   jpa:
     hibernate:
       ddl-auto: validate
@@ -63,3 +62,4 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+  port: 8081

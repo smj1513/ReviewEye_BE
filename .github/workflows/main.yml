@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d --restart=always --name revieweye -p 8080:8080 revieweye:latest
+          docker run -d --restart=always --name revieweye -p 8090:8090 revieweye:latest
 
       - name: Check application logs
         run: |

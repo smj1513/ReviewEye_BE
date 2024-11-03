@@ -49,13 +49,6 @@ springdoc:
   writer-with-default-pretty-printer: true
   model-and-view-allowed: true
 
-logging:
-  level:
-    org:
-      elasticsearch:
-        client: trace
-    tracer: trace
-
 server:
   servlet:
     encoding:

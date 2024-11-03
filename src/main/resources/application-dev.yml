@@ -12,3 +12,10 @@ spring:
       ssl:
         trust-store: cert_key.p12
         trust-store-password: "000221"
+
+logging:
+  level:
+    org:
+      elasticsearch:
+        client: trace
+    tracer: trace

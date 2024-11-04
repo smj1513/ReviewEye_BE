@@ -7,6 +7,8 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Repository;
 import spring.changyong.search.domain.model.ProductDocument;
@@ -64,6 +66,13 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 			log.info("updateQuery: {}", updateQuery);
 		});
 		elasticsearchOperations.bulkUpdate(updateQueries, ProductDocument.class);
+	}
+
+	@Override
+	public SearchHits<ProductDocument> searchAutoComplete(String keyword, Pageable pageable) {
+		Criteria criteria = new Criteria("name").contains(keyword);
+		CriteriaQuery query = new CriteriaQuery(criteria, pageable);
+		return elasticsearchOperations.search(query, ProductDocument.class);
 	}
 
 

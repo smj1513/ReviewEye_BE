@@ -10,4 +10,5 @@ public interface CustomProductSearchRepository {
 	SearchHits<ProductDocument> searchByName(String name, Pageable pageable);
 	SearchHits<ProductDocument> searchByTag(String keyword, Pageable pageable);
 	void updateDocuments(Iterable<ProductDocument> productDocument);
+	SearchHits<ProductDocument> searchAutoComplete(String keyword, Pageable pageable);
 }

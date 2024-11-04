@@ -2,10 +2,7 @@ package spring.changyong.search.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,11 +77,16 @@ public class SearchAppService {
 	public Page<SearchResponse.AutoComplete> autoCompleteQuery(String prefix, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
-		Page<ProductDocument> autoCompleteDocument = productSearchRepository.findByTitleStartingWith(prefix.replace(" ",""), pageRequest);
+		SearchHits<ProductDocument> searchHits = productSearchRepository.searchAutoComplete(prefix, pageRequest);
 
-
-		return autoCompleteDocument.map(doc-> SearchResponse.AutoComplete.builder()
-				.productName(doc.getName())
-				.build());
+		return new PageImpl<>(
+				searchHits.getSearchHits().stream()
+						.map(hit -> SearchResponse.AutoComplete.builder()
+								.productName(hit.getContent().getName())
+								.build())
+						.collect(Collectors.toList()),
+				pageRequest,
+				searchHits.getTotalHits()
+		);
 	}
 }

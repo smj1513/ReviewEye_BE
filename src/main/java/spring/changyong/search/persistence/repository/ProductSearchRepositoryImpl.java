@@ -1,9 +1,11 @@
 package spring.changyong.search.persistence.repository;
 
+import co.elastic.clients.elasticsearch.core.search.Suggester;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
@@ -38,8 +40,6 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);
-
-		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}", searchHit.getContent().getName(), searchHit.getScore()));
 		return result;
 	}
 
@@ -51,7 +51,6 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(nativeQuery, ProductDocument.class);
-		result.forEach(searchHit -> log.info("searchHit: {} \n, score:{}, keyword:{}", searchHit.getContent().getName(), searchHit.getScore(), searchHit.getContent().getPositiveTags().toString()));
 		return result;
 	}
 
@@ -70,9 +69,16 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 
 	@Override
 	public SearchHits<ProductDocument> searchAutoComplete(String keyword, Pageable pageable) {
-		Criteria criteria = new Criteria("name").contains(keyword);
-		CriteriaQuery query = new CriteriaQuery(criteria, pageable);
-		return elasticsearchOperations.search(query, ProductDocument.class);
+		ProductSearchQueryBuilder builder = new ProductSearchQueryBuilder(keyword);
+		NativeQuery query = builder.addMatchPhraseQuery()
+				.addMatchQuery()
+				.addMultiMatchQuery()
+				.addTermQuery()
+				.build(pageable);
+
+		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);
+
+		return result;
 	}
 
 

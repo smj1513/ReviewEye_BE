@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 
-@Component
 public class HttpClientConfigImpl implements HttpClientConfigCallback {
 
 	@Value("${spring.data.elasticsearch.ssl.trust-store}")
@@ -28,7 +27,7 @@ public class HttpClientConfigImpl implements HttpClientConfigCallback {
 	public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
 		try {
 			Resource resource = new ClassPathResource(trustStore);
-			KeyStore trustStore = KeyStore.getInstance("pkcs12");
+			KeyStore trustStore = KeyStore.getInstance("PKCS12");
 			try (InputStream inputStream = resource.getInputStream()) {
 				trustStore.load(inputStream, trustStorePassword.toCharArray());
 			}

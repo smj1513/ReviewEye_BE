@@ -3,6 +3,7 @@ package spring.changyong.search.utils.builder;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
@@ -18,6 +19,8 @@ import java.util.List;
 
 public class TagQueryBuilder {
 
+	@Value("${model.id}")
+	private String modelId;
 	private String tag;
 	private String name;
 	private List<AbstractQueryStrategy> queryStrategies = new ArrayList<>();
@@ -57,6 +60,7 @@ public class TagQueryBuilder {
 
 		return nativeQueryBuilder
 				.withQuery(bool.build()._toQuery())
+				.withSort(s->s.score(score->score.order(SortOrder.Desc)))
 				.withPageable(pageable).build();
 	}
 

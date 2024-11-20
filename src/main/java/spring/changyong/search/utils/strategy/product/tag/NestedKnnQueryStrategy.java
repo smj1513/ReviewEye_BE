@@ -1,6 +1,7 @@
 package spring.changyong.search.utils.strategy.product.tag;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.query_dsl.ChildScoreMode;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.knn_search.KnnSearchQuery;
@@ -28,10 +29,11 @@ public class NestedKnnQueryStrategy extends AbstractQueryStrategy {
 						.query(q -> q.knn(
 										knn -> knn.field("positiveTags.embedding")
 												.queryVector(embeddingVector)
-												.similarity(0.7f)
+												.similarity(0.8f)
 												.numCandidates(5333L)
 								)
 						)
+						.scoreMode(ChildScoreMode.Max)
 						.innerHits(in->in.sort(s->s.score(sc->sc.order(SortOrder.Desc))))
 		);
 	}

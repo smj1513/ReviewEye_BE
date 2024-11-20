@@ -9,9 +9,6 @@ spring:
       url: elastic.ajb.kr:443
       username: "elastic"
       password: "032621"
-      ssl:
-        trust-store: ca.p12
-        trust-store-password: "000221"
 
 logging:
   level:

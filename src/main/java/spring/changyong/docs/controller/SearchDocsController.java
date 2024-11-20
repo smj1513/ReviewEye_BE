@@ -57,4 +57,14 @@ public interface SearchDocsController {
 			@RequestParam(defaultValue = "0") int page,
 			@Parameter(description = "페이지 크기")
 			@RequestParam(defaultValue = "10") int size);
+
+	@Operation(summary = "벡터 검색", description = "태그 벡터 기반 검색")
+	@ApiResponse(responseCode = "200", description = "성공")
+	public CommonResponse<SearchResponse.Result<SearchResponse.ProductResult>> searchSimilarity(
+			@Parameter(description = "검색 키워드 (키워드 + 카테고리)")
+			@RequestParam String keyword,
+			@Parameter(description = "페이지 번호 - 0번부터 시작")
+			@RequestParam(defaultValue = "0") int page,
+			@Parameter(description = "페이지 크기")
+			@RequestParam(defaultValue = "10") int size);
 }

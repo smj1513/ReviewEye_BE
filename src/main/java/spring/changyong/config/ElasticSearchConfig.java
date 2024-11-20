@@ -1,11 +1,20 @@
 package spring.changyong.config;
 
+import co.elastic.clients.elasticsearch.inference.ElasticsearchInferenceAsyncClient;
+import co.elastic.clients.elasticsearch.inference.ElasticsearchInferenceClient;
+import co.elastic.clients.elasticsearch.ingest.InferenceConfig;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchClients;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.elasticsearch.support.HttpHeaders;
 
@@ -20,12 +29,29 @@ import java.security.cert.X509Certificate;
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
 //	private final HttpClientConfigImpl httpClientConfigCallback;
+
 	@Value("${spring.data.elasticsearch.url}")
 	private String url;
 	@Value("${spring.data.elasticsearch.username}")
 	private String username;
 	@Value("${spring.data.elasticsearch.password}")
 	private String password;
+
+	@Bean
+	public RestClient restClient() {
+		ClientConfiguration clientConfiguration = clientConfiguration();
+		return ElasticsearchClients.getRestClient(clientConfiguration);
+	}
+
+	@Bean
+	public ElasticsearchTransport elasticsearchTransport(){
+		return new RestClientTransport(restClient(), new JacksonJsonpMapper());
+	}
+
+	@Bean
+	public ElasticsearchInferenceClient inferenceClient(){
+		return new ElasticsearchInferenceClient(elasticsearchTransport());
+	}
 
 	@Override
 	public ClientConfiguration clientConfiguration() {

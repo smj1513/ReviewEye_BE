@@ -1,6 +1,11 @@
 package spring.changyong.search.persistence.repository;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.search.Suggester;
+import co.elastic.clients.elasticsearch.inference.*;
+import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceIngestProcessor;
+import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceTrainedModels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +19,12 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Repository;
 import spring.changyong.search.domain.model.ProductDocument;
+import spring.changyong.search.service.InferenceService;
 import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ProductSearchQueryBuilder;
 import spring.changyong.search.utils.builder.TagQueryBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +35,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 
 	private final ElasticsearchOperations elasticsearchOperations;
 	private final SearchUtils searchUtils;
-
+	private final InferenceService inferenceService;
 
 	@Override
 	public SearchHits<ProductDocument> searchByName(String nameKeyword, Pageable pageable) {
@@ -51,12 +58,14 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(nativeQuery, ProductDocument.class);
+
 		return result;
 	}
 
 	@Override
 	public void updateDocuments(Iterable<ProductDocument> productDocument) {
 		List<UpdateQuery> updateQueries = new ArrayList<>();
+
 		productDocument.forEach(doc->{
 			UpdateQuery updateQuery = UpdateQuery.builder(doc.getId().toString())
 					.withDocument(Document.create().fromJson(searchUtils.convertObjectToJson(doc)))
@@ -64,6 +73,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 			updateQueries.add(updateQuery);
 			log.info("updateQuery: {}", updateQuery);
 		});
+
 		elasticsearchOperations.bulkUpdate(updateQueries, ProductDocument.class);
 	}
 
@@ -79,6 +89,15 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);
 
 		return result;
+	}
+
+	@Override
+	public SearchHits<ProductDocument> searchSimilarityKeyword(String keyword, Pageable pageable) {
+		TagQueryBuilder builder = new TagQueryBuilder(keyword);
+		NativeQuery query = builder.addTagMatchQuery().addNestedKnnQuery(inferenceService).buildKnnQuery(pageable);
+
+		SearchHits<ProductDocument> searchHits = searchUtils.searchWithTimer(query, ProductDocument.class);
+		return searchHits;
 	}
 
 

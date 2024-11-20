@@ -50,4 +50,12 @@ public class SearchController implements SearchDocsController {
 	                                                                           @RequestParam(defaultValue = "10") int size) {
 		return CommonResponse.success(SuccessCode.OK, searchService.autoCompleteQuery(URLDecoder.decode(prefix, StandardCharsets.UTF_8), page, size));
 	}
+
+	@GetMapping("/products/similarity/search")
+	public CommonResponse<SearchResponse.Result<SearchResponse.ProductResult>> searchSimilarity(
+			@RequestParam String keyword,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		return CommonResponse.success(SuccessCode.OK, searchService.searchSimilarityQuery(URLDecoder.decode(keyword, StandardCharsets.UTF_8), page,size));
+	}
 }

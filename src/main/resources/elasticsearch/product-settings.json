@@ -22,18 +22,6 @@
       "nori_part_of_speech": {
         "type": "nori_part_of_speech"
       },
-      "edge_ngram_filter_front": {
-        "type": "edge_ngram",
-        "min_gram": "1",
-        "max_gram": "10",
-        "side": "front"
-      },
-      "edge_ngram_filter_back": {
-        "type": "edge_ngram",
-        "min_gram": "1",
-        "max_gram": "10",
-        "side": "back"
-      },
       "my_synonym": {
         "type": "synonym",
         "synonyms": [
@@ -65,8 +53,6 @@
         "type": "custom",
         "tokenizer": "n_gram_tokenizer",
         "filter": [
-          "edge_ngram_filter_front",
-          "edge_ngram_filter_back",
           "lowercase",
           "remove_spec_char"
         ]

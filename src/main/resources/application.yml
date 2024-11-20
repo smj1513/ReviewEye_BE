@@ -56,3 +56,6 @@ server:
       enabled: true
       force: true
   port: 8090
+
+model:
+  id: klue__bert-base

@@ -31,7 +31,6 @@ dependencies {
 //    // Replace the following with the starter dependencies of specific modules you wish to use
 //    implementation 'org.springframework.ai:spring-ai-openai'
 //    implementation 'org.springframework.ai:spring-ai-transformers-spring-boot-starter'
-
     implementation group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '5.3.3'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -54,7 +53,10 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
+test {
+    maxHeapSize = "12g"
+    jvmArgs = ['-Xms8g', '-Xmx12g']  // 최소 8GB, 최대 12GB
+}
 
 jar.enabled = false
 bootJar.archiveFileName = 'reviewEye.jar'

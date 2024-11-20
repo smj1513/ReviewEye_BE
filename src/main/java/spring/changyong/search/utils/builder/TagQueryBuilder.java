@@ -6,7 +6,10 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import spring.changyong.search.domain.model.Tag;
+import spring.changyong.search.service.InferenceService;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
+import spring.changyong.search.utils.strategy.product.tag.NestedKnnQueryStrategy;
 import spring.changyong.search.utils.strategy.product.tag.TagMatchQueryStrategy;
 import spring.changyong.search.utils.strategy.product.tag.TagNestedQueryStrategy;
 
@@ -38,6 +41,23 @@ public class TagQueryBuilder {
 	public TagQueryBuilder addTagMatchQuery() {
 		queryStrategies.add(new TagMatchQueryStrategy(name));
 		return this;
+	}
+
+	public TagQueryBuilder addNestedKnnQuery(InferenceService inferenceService){
+		queryStrategies.add(new NestedKnnQueryStrategy(tag, inferenceService));
+		return this;
+	}
+
+	public NativeQuery buildKnnQuery(Pageable pageable){
+		NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
+		BoolQuery.Builder bool = QueryBuilders.bool();
+		for (AbstractQueryStrategy queryStrategy : queryStrategies) {
+			bool.must(queryStrategy.buildQuery());
+		}
+
+		return nativeQueryBuilder
+				.withQuery(bool.build()._toQuery())
+				.withPageable(pageable).build();
 	}
 
 	public NativeQuery build(Pageable pageable) {

@@ -89,4 +89,20 @@ public class SearchAppService {
 				searchHits.getTotalHits()
 		);
 	}
+
+	public SearchResponse.Result<SearchResponse.ProductResult> searchSimilarityQuery(String keyword, int page, int size){
+		PageRequest pageRequest = PageRequest.of(page, size);
+		SearchHits<ProductDocument> searchHits = productSearchRepository.searchSimilarityKeyword(keyword, pageRequest);
+		List<SearchResponse.ProductResult> productResultList = searchHits
+				.stream()
+				.map(SearchResponse.ProductResult::from)
+				.toList();
+
+		boolean hasNext = searchHits.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();
+		Long searchTime = ExecutionTimeHolder.get();
+		ExecutionTimeHolder.clear();
+		Slice<SearchResponse.ProductResult> productResults = new SliceImpl<>(productResultList, pageRequest, hasNext);
+
+		return new SearchResponse.Result<>(searchTime, productResults);
+	}
 }

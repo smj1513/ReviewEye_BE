@@ -11,7 +11,7 @@ public enum ErrorCode {
 
 
 	//위에 추가
-
+	INFERENCE_FAILURE(HttpStatus.FAILED_DEPENDENCY, EntityCode.PRODUCT, ExceptionCode.CONFLICT, "Inference Failure"),
 	NOT_FOUND_ENTITY(HttpStatus.NOT_FOUND, EntityCode.COMMON, ExceptionCode.NOT_FOUND, "Entity Not Found"),
 	INTENAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, EntityCode.COMMON, ExceptionCode.INTERNAL_SERVER_ERROR, "Internal Server Error"),
 	;

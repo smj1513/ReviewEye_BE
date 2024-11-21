@@ -11,6 +11,7 @@ import spring.changyong.search.domain.model.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +49,22 @@ public class ProductDomainService {
 					.count(newTag.getCount())
 					.build();
 		}).toList();
+	}
+
+	/**
+	 * @return pivotTags에 대한 Percentage를 return함
+	 * */
+	public List<ProductResponse.Keyword> changeCountToPercentage(List<Tag> pivotTags, List<Tag> otherTags){
+		List<Tag> newTags1 = pivotTags.size() < 10 ? pivotTags : pivotTags.subList(0, 10);
+		List<Tag> newTags2 = otherTags.size() < 10 ? otherTags : otherTags.subList(0,10);
+		int max = Stream.concat(newTags1.stream(), newTags2.stream()).toList().stream().mapToInt(Tag::getCount).max().orElseGet(()->1);
+		return newTags1.stream().map(newTag ->{
+			return ProductResponse.Keyword.builder()
+					.keyword(newTag.getKeyword())
+					.percentage((double) newTag.getCount() / max*100)
+					.count(newTag.getCount())
+					.build();
+		}
+		).toList();
 	}
 }

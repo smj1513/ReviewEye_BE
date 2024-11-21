@@ -43,16 +43,18 @@ public class ProductAppService {
 	public ProductResponse.PositiveKeyword getPositiveKeyword(String id) {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
 		List<Tag> positiveTags = productDocument.getPositiveTags();
+		List<Tag> negativeTags = productDocument.getNegativeTags();
 		return ProductResponse.PositiveKeyword.builder()
-				.keywords(productDomainService.changeCountToPercentage(positiveTags))
+				.keywords(productDomainService.changeCountToPercentage(positiveTags, negativeTags))
 				.build();
 	}
 
 	public ProductResponse.NegativeKeyword getNegativeKeyword(String id) {
 		ProductDocument productDocument = productRepository.findByProductId(id).orElseThrow(() -> new BusinessLogicException(ErrorCode.NOT_FOUND_ENTITY, "상품을 찾을 수 없습니다."));
 		List<Tag> negativeTags = productDocument.getNegativeTags();
+		List<Tag> positiveTags = productDocument.getPositiveTags();
 		return ProductResponse.NegativeKeyword.builder()
-				.keywords(productDomainService.changeCountToPercentage(negativeTags))
+				.keywords(productDomainService.changeCountToPercentage(negativeTags, positiveTags))
 				.build();
 	}
 

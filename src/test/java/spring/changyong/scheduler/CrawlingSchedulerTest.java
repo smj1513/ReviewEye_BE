@@ -1,33 +1,33 @@
 package spring.changyong.scheduler;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import spring.changyong.common.api.code.ErrorCode;
-import spring.changyong.common.exception.BusinessLogicException;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Component
-@Log4j2
-@RequiredArgsConstructor
-public class CrawlingScheduler {
+@SpringBootTest
+@Disabled
+class CrawlingSchedulerTest {
+	@Autowired
+	ProductSearchRepository productSearchRepository;
 
-	private final ProductSearchRepository productSearchRepository;
+	@Autowired
+	CrawlingService crawlingService;
 
-	private final CrawlingService crawlingService;
-	@Scheduled(cron = "0 0 3 * * ?")
+	@Test
 	public void updatePrice() throws Exception{
+
+
 		int pageSize = 10;
 		int pageNumber = 0;
 		Page<ProductDocument> page;
-
 		do {
 			PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 			page = productSearchRepository.findAll(pageRequest);
@@ -47,7 +47,6 @@ public class CrawlingScheduler {
 			pageNumber++;
 
 		} while (page.hasNext());
-
-		System.out.println("=========== All Pages Processing Complete ==========");
 	}
+
 }

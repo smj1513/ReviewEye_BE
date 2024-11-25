@@ -32,7 +32,7 @@ public class CrawlingScheduler {
 			PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 			page = productSearchRepository.findAll(pageRequest);
 
-			System.out.println("=========== Page " + (pageNumber + 1) + " Document Load Complete ==========");
+			log.info("=========== Page {} Document Load Complete ==========", pageNumber + 1);
 
 			for (ProductDocument doc : page.getContent()) {
 				crawlingService.updateProduct(doc);
@@ -48,6 +48,6 @@ public class CrawlingScheduler {
 
 		} while (page.hasNext());
 
-		System.out.println("=========== All Pages Processing Complete ==========");
+		log.info("=========== All Pages Processing Complete ==========");
 	}
 }

@@ -25,7 +25,7 @@ class CrawlingSchedulerTest {
 	public void updatePrice() throws Exception{
 
 
-		int pageSize = 10;
+		int pageSize = 100;
 		int pageNumber = 0;
 		Page<ProductDocument> page;
 		do {

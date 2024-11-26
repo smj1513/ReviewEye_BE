@@ -3,7 +3,6 @@ spring:
     active: dev
   application:
     name: changyong
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mirror.ajb.kr:3306/oliveyoung
@@ -29,6 +28,8 @@ spring:
         tokenizer:
           uri: https://huggingface.co/Xenova/kobert/blob/main/tokenizer.json
         enabled: true
+  jackson:
+    time-zone: Asia/Seoul
 springdoc:
   swagger-ui:
     groups-order: DESC

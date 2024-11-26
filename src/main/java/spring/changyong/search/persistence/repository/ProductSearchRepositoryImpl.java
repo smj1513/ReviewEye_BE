@@ -1,23 +1,30 @@
 package spring.changyong.search.persistence.repository;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.UpdateRequest;
 import co.elastic.clients.elasticsearch.core.search.Suggester;
 import co.elastic.clients.elasticsearch.inference.*;
 import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceIngestProcessor;
 import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceTrainedModels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Repository;
+import spring.changyong.config.ElasticSearchConfig;
 import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.service.InferenceService;
 import spring.changyong.search.utils.SearchUtils;
@@ -25,8 +32,12 @@ import spring.changyong.search.utils.builder.ProductSearchQueryBuilder;
 import spring.changyong.search.utils.builder.TagQueryBuilder;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @Repository
 @Log4j2
@@ -34,6 +45,7 @@ import java.util.List;
 public class ProductSearchRepositoryImpl implements CustomProductSearchRepository {
 
 	private final ElasticsearchOperations elasticsearchOperations;
+	private final ElasticsearchClient client;
 	private final SearchUtils searchUtils;
 	private final InferenceService inferenceService;
 
@@ -67,9 +79,19 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		List<UpdateQuery> updateQueries = new ArrayList<>();
 
 		productDocument.forEach(doc->{
+			Map<String, Object> priceUpdateMap = new HashMap<>();
+			priceUpdateMap.put("price", doc.getPrice());
+			priceUpdateMap.put("discount_price", doc.getDiscountPrice());
+
+			// partial update를 위한 Document 생성
+			Document document = Document.create();
+			document.put("doc", priceUpdateMap);
+
 			UpdateQuery updateQuery = UpdateQuery.builder(doc.getId().toString())
-					.withDocument(Document.create().fromJson(searchUtils.convertObjectToJson(doc)))
+					.withDocument(document)
+					.withDocAsUpsert(false)  // document가 없을 경우 새로 생성
 					.build();
+
 			updateQueries.add(updateQuery);
 			log.info("updateQuery: {}", updateQuery.getDocument());
 		});

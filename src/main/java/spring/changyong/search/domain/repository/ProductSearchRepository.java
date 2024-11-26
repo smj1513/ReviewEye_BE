@@ -9,6 +9,7 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.persistence.repository.CustomProductSearchRepository;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface ProductSearchRepository extends CustomProductSearchRepository, ElasticsearchRepository<ProductDocument, Long> {
 	Optional<ProductDocument> findByProductId(String productId);

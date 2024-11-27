@@ -7,6 +7,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.util.TimeZone;
+
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
 		type = FilterType.ASSIGNABLE_TYPE,
 		classes = {spring.changyong.search.domain.repository.ProductSearchRepository.class,
@@ -15,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class ChangyongApplication {
-
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 		SpringApplication.run(ChangyongApplication.class, args);
 	}
 

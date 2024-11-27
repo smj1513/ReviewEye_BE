@@ -61,10 +61,17 @@ public class ProductDomainService {
 		return newTags1.stream().map(newTag ->{
 			return ProductResponse.Keyword.builder()
 					.keyword(newTag.getKeyword())
-					.percentage((double) newTag.getCount() / max*100)
+					.percentage(changeLogScale(max, newTag.getCount()))
 					.count(newTag.getCount())
 					.build();
 		}
 		).toList();
+	}
+
+	private double changeLogScale(int max, int value){
+		double logValue = Math.log(value+1);
+		double logMax = Math.log(max+1);
+
+		return (logValue/logMax) * 100;
 	}
 }

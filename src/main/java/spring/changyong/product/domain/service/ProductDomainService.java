@@ -53,25 +53,25 @@ public class ProductDomainService {
 
 	/**
 	 * @return pivotTags에 대한 Percentage를 return함
-	 * */
-	public List<ProductResponse.Keyword> changeCountToPercentage(List<Tag> pivotTags, List<Tag> otherTags){
+	 */
+	public List<ProductResponse.Keyword> changeCountToPercentage(List<Tag> pivotTags, List<Tag> otherTags) {
 		List<Tag> newTags1 = pivotTags.size() < 10 ? pivotTags : pivotTags.subList(0, 10);
-		List<Tag> newTags2 = otherTags.size() < 10 ? otherTags : otherTags.subList(0,10);
-		int max = Stream.concat(newTags1.stream(), newTags2.stream()).toList().stream().mapToInt(Tag::getCount).max().orElseGet(()->1);
-		return newTags1.stream().map(newTag ->{
-			return ProductResponse.Keyword.builder()
-					.keyword(newTag.getKeyword())
-					.percentage(changeLogScale(max, newTag.getCount()))
-					.count(newTag.getCount())
-					.build();
-		}
+		List<Tag> newTags2 = otherTags.size() < 10 ? otherTags : otherTags.subList(0, 10);
+		int max = Stream.concat(newTags1.stream(), newTags2.stream()).toList().stream().mapToInt(Tag::getCount).max().orElseGet(() -> 1);
+		return newTags1.stream().map(newTag -> {
+					return ProductResponse.Keyword.builder()
+							.keyword(newTag.getKeyword())
+							.percentage(changeLogScale(max, newTag.getCount()))
+							.count(newTag.getCount())
+							.build();
+				}
 		).toList();
 	}
 
-	private double changeLogScale(int max, int value){
-		double logValue = Math.log(value+1);
-		double logMax = Math.log(max+1);
+	private double changeLogScale(int max, int value) {
+		double logValue = Math.log10(value + 1);
+		double logMax = Math.log10(max + 1);
 
-		return (logValue/logMax) * 100;
+		return (logValue / logMax) * 100;
 	}
 }

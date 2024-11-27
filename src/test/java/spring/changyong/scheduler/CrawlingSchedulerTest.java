@@ -21,32 +21,12 @@ class CrawlingSchedulerTest {
 	@Autowired
 	CrawlingService crawlingService;
 
+	@Autowired
+	CrawlingScheduler crawlingScheduler;
+
 	@Test
 	public void updatePrice() throws Exception{
-
-
-		int pageSize = 100;
-		int pageNumber = 0;
-		Page<ProductDocument> page;
-		do {
-			PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-			page = productSearchRepository.findAll(pageRequest);
-
-			System.out.println("=========== Page " + (pageNumber + 1) + " Document Load Complete ==========");
-
-			for (ProductDocument doc : page.getContent()) {
-				crawlingService.updateProduct(doc);
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					System.out.println(e.getMessage());
-				}
-			}
-
-			productSearchRepository.updateDocuments(page.getContent());
-			pageNumber++;
-
-		} while (page.hasNext());
+		crawlingScheduler.updatePrice();
 	}
 
 }

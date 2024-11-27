@@ -4,17 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 import spring.changyong.scheduler.dto.PriceResponse;
-import spring.changyong.search.domain.model.ProductDocument;
 
 import java.net.URI;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -25,15 +20,11 @@ public class CrawlingService {
 	@Value("${crawling.base-url}")
 	private String baseUrl;
 
-	public void updateProduct(ProductDocument productDocument){
-		URI uri = URI.create(baseUrl+"/get_price/" + productDocument.getProductId());
+	public PriceResponse getPrice(String productId){
+		URI uri = URI.create(baseUrl+"/get_price/" + productId);
 		ResponseEntity<PriceResponse> exchange = restTemplate.exchange(uri, HttpMethod.GET, null, PriceResponse.class);
-		Optional.ofNullable(exchange.getBody()).ifPresent(priceResponse -> {
-			Integer price = priceResponse.getPrice();
-			Integer discountPrice = priceResponse.getDiscountPrice();
-			productDocument.setPrice(price == null ? 0 : price);
-			productDocument.setDiscountPrice(discountPrice == null ? 0 : discountPrice);
-		});
+		log.info(exchange.getBody());
+		return exchange.getBody();
 	}
 }
 

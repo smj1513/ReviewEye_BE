@@ -63,5 +63,7 @@ public class ProductDocument {
 	@Builder.Default
 	private List<Tag> negativeTags = new ArrayList<>();
 
-
+	public String toString(){
+		return "id:" + id + '\n' + "product_id:" + productId + "\n" + "name:" + name;
+	}
 }

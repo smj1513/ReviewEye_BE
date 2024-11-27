@@ -7,22 +7,25 @@ import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.UpdateRequest;
 import co.elastic.clients.elasticsearch.core.search.Suggester;
 import co.elastic.clients.elasticsearch.inference.*;
+import co.elastic.clients.elasticsearch.transform.Source;
 import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceIngestProcessor;
 import co.elastic.clients.elasticsearch.xpack.usage.MlInferenceTrainedModels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Repository;
 import spring.changyong.config.ElasticSearchConfig;
 import spring.changyong.search.domain.model.ProductDocument;
@@ -75,28 +78,22 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 	}
 
 	@Override
-	public void updateDocuments(Iterable<ProductDocument> productDocument) {
+	public void updateBulkDocuments(Map<String, Document> update) {
 		List<UpdateQuery> updateQueries = new ArrayList<>();
 
-		productDocument.forEach(doc->{
-			Map<String, Object> priceUpdateMap = new HashMap<>();
-			priceUpdateMap.put("price", doc.getPrice());
-			priceUpdateMap.put("discount_price", doc.getDiscountPrice());
-
-			// partial update를 위한 Document 생성
-			Document document = Document.create();
-			document.put("doc", priceUpdateMap);
-
-			UpdateQuery updateQuery = UpdateQuery.builder(doc.getId().toString())
-					.withDocument(document)
-					.withDocAsUpsert(false)  // document가 없을 경우 새로 생성
-					.build();
-
-			updateQueries.add(updateQuery);
-			log.info("updateQuery: {}", updateQuery.getDocument());
+		update.forEach((id,doc)->{
+			updateQueries.add(UpdateQuery.builder(id).withDocument(doc).withDocAsUpsert(false).build());
 		});
-
 		elasticsearchOperations.bulkUpdate(updateQueries, ProductDocument.class);
+		log.info("=======bulkUpdate Complete========");
+	}
+
+	public Page<ProductDocument> searchWithSource(String[] source, Pageable pageable){
+
+		SourceFilter sourceFilter = FetchSourceFilter.of(s -> s.withIncludes(source));
+		NativeQuery query = NativeQuery.builder().withSourceFilter(sourceFilter).withPageable(pageable).build();
+		SearchHits<ProductDocument> result = elasticsearchOperations.search(query, ProductDocument.class);
+		return new PageImpl<>(result.getSearchHits().stream().map(SearchHit::getContent).toList(), pageable, result.getTotalHits());
 	}
 
 	@Override

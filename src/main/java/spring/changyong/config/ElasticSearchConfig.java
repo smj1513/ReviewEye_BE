@@ -59,6 +59,8 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 				.connectedTo(url)
 				.usingSsl(disableSslVerification(), allHostsValid())
 				.withBasicAuth(username, password)
+				.withConnectTimeout(10000)
+				.withSocketTimeout(10000)
 				.build();
 		/*
 		* 	.withClientConfigurer(ElasticsearchClients

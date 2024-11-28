@@ -47,6 +47,9 @@ public class ReviewDocument {
 	@Field(name = "evaluation", type = FieldType.Text)
 	private String evaluation;
 
+	@Field(name = "sentiment", type = FieldType.Boolean)
+	private boolean sentiment;
+
 	@Field(name = "date", type = FieldType.Date, pattern = "yyyy.MM.dd")
 	private LocalDate date;
 }

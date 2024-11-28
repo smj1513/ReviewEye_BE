@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import spring.changyong.common.api.code.SuccessCode;
 import spring.changyong.common.api.response.CommonResponse;
 import spring.changyong.search.api.response.SearchResponse;
+import spring.changyong.search.enums.OrderBy;
+import spring.changyong.search.enums.ResultFilter;
+import spring.changyong.search.enums.SortOption;
 
 @Tag(name = "검색 API", description = "검색 API")
 public interface SearchDocsController {
@@ -26,7 +29,13 @@ public interface SearchDocsController {
 			@Parameter(description = "페이지 번호 - 0번부터 시작")
 			@RequestParam(defaultValue = "0") int page,
 			@Parameter(description = "페이지 크기")
-			@RequestParam(defaultValue = "10") int size);
+			@RequestParam(defaultValue = "10") int size,
+			@Parameter(description = "긍부정 필터 - (POSITIVE, NEGATIVE, BOTH) - 디폴트 BOTH")
+			@RequestParam(defaultValue = "both") ResultFilter filter,
+			@Parameter(description = "정렬 옵션 - (STAR, DATE,SCORE) - 디폴트 SCORE")
+			@RequestParam(defaultValue = "score") SortOption sortOption,
+			@Parameter(description = "정렬 순서 - (DESC, ASC) - 디폴트 DESC")
+			@RequestParam(defaultValue = "desc") OrderBy orderBy);
 
 	@Operation(summary = "키워드 기반 상품 검색", description = "키워드 기반 상품 검색")
 	@ApiResponse(responseCode = "200", description = "성공")

@@ -11,6 +11,9 @@ import spring.changyong.search.domain.model.ProductDocument;
 import spring.changyong.search.domain.model.ReviewDocument;
 import spring.changyong.search.domain.repository.ProductSearchRepository;
 import spring.changyong.search.domain.repository.ReviewSearchRepository;
+import spring.changyong.search.enums.OrderBy;
+import spring.changyong.search.enums.ResultFilter;
+import spring.changyong.search.enums.SortOption;
 import spring.changyong.search.utils.ExecutionTimeHolder;
 
 import java.util.List;
@@ -58,10 +61,16 @@ public class SearchAppService {
 		return new SearchResponse.Result<>(searchTime, productResults);
 	}
 
-	public SearchResponse.Result<SearchResponse.ReviewResult> searchReviewByProductId(String id, String keyword, int page, int size) {
+	public SearchResponse.Result<SearchResponse.ReviewResult> searchReviewByProductId(String id,
+	                                                                                  String keyword,
+	                                                                                  int page,
+	                                                                                  int size,
+	                                                                                  ResultFilter filter,
+	                                                                                  SortOption sortOption,
+	                                                                                  OrderBy orderBy) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
-		SearchHits<ReviewDocument> searchHits = reviewSearchRepository.searchByProductId(id, keyword, pageRequest);
+		SearchHits<ReviewDocument> searchHits = reviewSearchRepository.searchByProductId(id, keyword, pageRequest, filter, sortOption, orderBy);
 		List<SearchResponse.ReviewResult> reviewResultList = searchHits
 				.stream()
 				.map(SearchResponse.ReviewResult::from)

@@ -107,7 +107,8 @@ public class SearchResponse {
 		private String userSkinInfo;
 		@Schema(description = "평가", example = "좋아요")
 		private String evaluation;
-
+		@Schema(description = "긍부정", example = "0")
+		private boolean sentiment;
 		private LocalDate createdAt;
 
 		public static ReviewResult from(SearchHit<ReviewDocument> searchHit) {

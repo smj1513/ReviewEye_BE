@@ -7,6 +7,9 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 import spring.changyong.search.domain.model.ReviewDocument;
+import spring.changyong.search.enums.OrderBy;
+import spring.changyong.search.enums.ResultFilter;
+import spring.changyong.search.enums.SortOption;
 import spring.changyong.search.utils.SearchUtils;
 import spring.changyong.search.utils.builder.ReviewSearchQueryBuilder;
 
@@ -18,11 +21,14 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 
 
 	@Override
-	public SearchHits<ReviewDocument> searchByProductId(String id, String keyword, Pageable pageable) {
+	public SearchHits<ReviewDocument> searchByProductId(String id, String keyword, Pageable pageable, ResultFilter filter, SortOption sortOption, OrderBy orderBy) {
 		ReviewSearchQueryBuilder queryBuilder = new ReviewSearchQueryBuilder(id, keyword)
 				.addProductIdFilter()
 				.addTermQuery()
-				.addMatchQuery();
+				.addMatchQuery()
+				.addResultFilter(filter)
+				.addSortOption(sortOption)
+				.addOrderBy(orderBy);
 
 		NativeQuery nativeQuery = queryBuilder.build(pageable);
 		return searchUtils.searchWithTimer(nativeQuery, ReviewDocument.class);

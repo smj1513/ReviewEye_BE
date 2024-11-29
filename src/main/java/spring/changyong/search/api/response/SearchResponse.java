@@ -123,6 +123,7 @@ public class SearchResponse {
 					.userSkinInfo(searchHit.getContent().getUserSkinInfo())
 					.evaluation(searchHit.getContent().getEvaluation())
 					.createdAt(searchHit.getContent().getDate())
+					.sentiment(searchHit.getContent().isSentiment())
 					.build();
 		}
 	}

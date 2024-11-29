@@ -29,12 +29,13 @@ public class NestedKnnQueryStrategy extends AbstractQueryStrategy {
 						.query(q -> q.knn(
 										knn -> knn.field("positiveTags.embedding")
 												.queryVector(embeddingVector)
-												.similarity(0.7885f)
+												.similarity(0.75f)
 												.numCandidates(5333L)
 								)
 						)
 						.scoreMode(ChildScoreMode.Max)
-						.innerHits(in->in.sort(s->s.score(sc->sc.order(SortOrder.Desc))))
+						.innerHits(in->in.sort(s->s.score(sc->sc.order(SortOrder.Desc))).source(s->s.filter(f->f.excludes("*embedding*"))))
+
 		);
 	}
 }

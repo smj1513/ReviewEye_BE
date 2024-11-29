@@ -31,9 +31,9 @@ public class ReviewSearchQueryBuilder {
 	private final String keyword;
 	private final List<QueryStrategy> queryStrategies = new ArrayList<>();
 	private boolean hasProductIdFilter;
-	private ResultFilter resultFilter;
-	private SortOption sortOption;
-	private OrderBy orderBy;
+	private ResultFilter resultFilter = ResultFilter.BOTH;
+	private SortOption sortOption = SortOption.SCORE;
+	private OrderBy orderBy = OrderBy.DESC;
 
 	public ReviewSearchQueryBuilder addProductIdFilter() {
 		hasProductIdFilter = true;

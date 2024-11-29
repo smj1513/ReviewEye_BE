@@ -1,5 +1,6 @@
 package spring.changyong.search.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -48,6 +49,7 @@ public class ReviewDocument {
 	private String evaluation;
 
 	@Field(name = "sentiment", type = FieldType.Boolean)
+	@JsonProperty(value = "sentiment")
 	private boolean sentiment;
 
 	@Field(name = "date", type = FieldType.Date, pattern = "yyyy.MM.dd")

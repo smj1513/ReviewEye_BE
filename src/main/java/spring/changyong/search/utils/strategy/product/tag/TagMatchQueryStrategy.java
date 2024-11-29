@@ -21,7 +21,7 @@ public class TagMatchQueryStrategy extends AbstractQueryStrategy {
 						.build()
 						._toQuery()
 				)
-				.should(QueryBuilders
+				.should(keyword.equals("화장품") ? QueryBuilders.matchAll().build()._toQuery() : QueryBuilders
 						.match()
 						.field("name")
 						.operator(Operator.And)

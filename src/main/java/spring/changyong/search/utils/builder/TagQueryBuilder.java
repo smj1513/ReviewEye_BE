@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import spring.changyong.search.domain.model.Tag;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import spring.changyong.search.service.InferenceService;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
 import spring.changyong.search.utils.strategy.product.tag.NestedKnnQueryStrategy;
@@ -19,13 +19,19 @@ import java.util.List;
 
 public class TagQueryBuilder {
 
-	@Value("${model.id}")
-	private String modelId;
 	private String tag;
 	private String name;
 	private List<AbstractQueryStrategy> queryStrategies = new ArrayList<>();
 
 	public TagQueryBuilder(String query) {
+		queryParse(query);
+	}
+
+	public void setQuery(String query) {
+		queryParse(query);
+	}
+
+	private void queryParse(String query) {
 		int lastIndex = query.lastIndexOf(' ');
 		if (lastIndex == -1) {
 			tag = query;
@@ -46,12 +52,12 @@ public class TagQueryBuilder {
 		return this;
 	}
 
-	public TagQueryBuilder addNestedKnnQuery(InferenceService inferenceService){
+	public TagQueryBuilder addNestedKnnQuery(InferenceService inferenceService) {
 		queryStrategies.add(new NestedKnnQueryStrategy(tag, inferenceService));
 		return this;
 	}
 
-	public NativeQuery buildKnnQuery(Pageable pageable){
+	public NativeQuery buildKnnQuery(Pageable pageable) {
 		NativeQueryBuilder nativeQueryBuilder = new NativeQueryBuilder();
 		BoolQuery.Builder bool = QueryBuilders.bool();
 		for (AbstractQueryStrategy queryStrategy : queryStrategies) {
@@ -60,8 +66,23 @@ public class TagQueryBuilder {
 
 		return nativeQueryBuilder
 				.withQuery(bool.build()._toQuery())
-				.withSort(s->s.score(score->score.order(SortOrder.Desc)))
+				.withSort(s -> s.field(field -> field
+						.field("positiveTags.count")
+						.order(SortOrder.Desc)
+						.nested(nested -> nested
+								.path("positiveTags")
+								.filter(QueryBuilders.knn()
+										.field("positiveTags.embedding")
+										.queryVectorBuilder(q -> q.textEmbedding(em -> em.modelId("klue__bert-base").modelText(tag)))
+										.similarity(0.75f)
+										.numCandidates(5333L)
+										.build()._toQuery()
+								)
+						)))
+				.withTrackScores(true)
+				.withSourceFilter(FetchSourceFilter.of(s -> s.withExcludes("*embedding*")))
 				.withPageable(pageable).build();
+
 	}
 
 	public NativeQuery build(Pageable pageable) {
@@ -88,7 +109,9 @@ public class TagQueryBuilder {
 										.prefixLength(2).build()._toQuery()
 								)
 						)))
+				.withTrackScores(true)
 				.withPageable(pageable)
+				.withSourceFilter(FetchSourceFilter.of(s -> s.withExcludes("*embedding*")))
 				.build();
 	}
 

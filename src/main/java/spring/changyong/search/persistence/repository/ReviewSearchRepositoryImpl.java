@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Repository;
 import spring.changyong.search.api.response.SearchResponse;
 import spring.changyong.search.domain.model.ReviewDocument;
@@ -66,6 +67,7 @@ public class ReviewSearchRepositoryImpl implements CustomReviewSearchRepository 
 						f -> f.field(sortOption.getValue())
 								.order(orderBy.equals(OrderBy.DESC) ? SortOrder.Desc : SortOrder.Asc)))
 				.withPageable(pageable)
+				.withSourceFilter(FetchSourceFilter.of(fs->fs.withExcludes("*embedding*")))
 				.build();
 		SearchHits<ReviewDocument> result = elasticsearchOperations.search(query, ReviewDocument.class);
 

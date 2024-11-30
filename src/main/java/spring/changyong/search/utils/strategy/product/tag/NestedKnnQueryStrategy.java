@@ -27,7 +27,7 @@ public class NestedKnnQueryStrategy extends AbstractQueryStrategy {
 										knn -> knn
 												.field("positiveTags.embedding")
 												.queryVector(TextEmbeddingUtil.embedding(keyword))
-												.similarity(0.75f)
+												.similarity(0.775f)
 												.numCandidates(5333L)
 								)
 						)

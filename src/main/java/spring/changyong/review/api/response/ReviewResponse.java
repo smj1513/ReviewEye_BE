@@ -24,7 +24,7 @@ public class ReviewResponse {
 		private Long star;
 		private Long recommend;
 		private LocalDate createdAt;
-	//	private boolean sentiment;
+		private boolean sentiment;
 
 		public static Result from(ReviewDocument review) {
 			return Result.builder()
@@ -36,6 +36,7 @@ public class ReviewResponse {
 					.star(review.getStar())
 					.recommend(review.getRecommend())
 					.createdAt(review.getDate())
+					.sentiment(review.isSentiment())
 					.build();
 		}
 	}

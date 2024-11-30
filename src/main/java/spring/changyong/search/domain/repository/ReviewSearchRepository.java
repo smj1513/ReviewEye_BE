@@ -11,5 +11,4 @@ import java.util.List;
 
 public interface ReviewSearchRepository extends ElasticsearchRepository<ReviewDocument, Long>, CustomReviewSearchRepository {
 	Page<ReviewDocument> findAllByProductId(String productId, Pageable pageable);
-
 }

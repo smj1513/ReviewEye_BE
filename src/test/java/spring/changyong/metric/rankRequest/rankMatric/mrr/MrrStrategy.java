@@ -9,6 +9,6 @@ public class MrrStrategy implements RankEvalStrategy {
 
 	@Override
 	public RankEvalMetric metric() {
-		return RankEvalMetric.of(me->me.meanReciprocalRank(mrr->mrr.k(10).relevantRatingThreshold(2)));
+		return RankEvalMetric.of(me->me.meanReciprocalRank(mrr->mrr.k(10).relevantRatingThreshold(1)));
 	}
 }

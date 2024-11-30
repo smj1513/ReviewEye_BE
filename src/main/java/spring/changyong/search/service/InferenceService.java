@@ -32,8 +32,7 @@ public class InferenceService {
 	public List<Float> textEmbedding(String text) {
 		Map<String, JsonData> docs = new HashMap<>();
 		docs.put("text_field", JsonData.of(text));
-		InferTrainedModelRequest inferTrainedModelRequest = InferTrainedModelRequest.of(itm -> itm.modelId(modelId)
-				.docs(docs));
+		InferTrainedModelRequest inferTrainedModelRequest = InferTrainedModelRequest.of(itm -> itm.modelId(modelId).docs(docs));
 		InferTrainedModelResponse inference = null;
 		try {
 			inference = client.ml().inferTrainedModel(inferTrainedModelRequest);
@@ -43,4 +42,5 @@ public class InferenceService {
 		List<FieldValue> textEmbeddingResults = inference.inferenceResults().getFirst().predictedValue();
 		return textEmbeddingResults.stream().map(f->(float)f.doubleValue()).toList();
 	}
+
 }

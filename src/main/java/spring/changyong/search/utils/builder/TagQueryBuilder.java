@@ -5,10 +5,12 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import spring.changyong.search.service.InferenceService;
+import spring.changyong.search.utils.TextEmbeddingUtil;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
 import spring.changyong.search.utils.strategy.product.tag.NestedKnnQueryStrategy;
 import spring.changyong.search.utils.strategy.product.tag.TagMatchQueryStrategy;
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagQueryBuilder {
-
 	private String tag;
 	private String name;
+
 	private List<AbstractQueryStrategy> queryStrategies = new ArrayList<>();
 
 	public TagQueryBuilder(String query) {
@@ -52,8 +54,8 @@ public class TagQueryBuilder {
 		return this;
 	}
 
-	public TagQueryBuilder addNestedKnnQuery(InferenceService inferenceService) {
-		queryStrategies.add(new NestedKnnQueryStrategy(tag, inferenceService));
+	public TagQueryBuilder addNestedKnnQuery() {
+		queryStrategies.add(new NestedKnnQueryStrategy(tag));
 		return this;
 	}
 
@@ -66,19 +68,22 @@ public class TagQueryBuilder {
 
 		return nativeQueryBuilder
 				.withQuery(bool.build()._toQuery())
-				.withSort(s -> s.field(field -> field
-						.field("positiveTags.count")
-						.order(SortOrder.Desc)
-						.nested(nested -> nested
-								.path("positiveTags")
-								.filter(QueryBuilders.knn()
-										.field("positiveTags.embedding")
-										.queryVectorBuilder(q -> q.textEmbedding(em -> em.modelId("klue__bert-base").modelText(tag)))
-										.similarity(0.75f)
-										.numCandidates(5333L)
-										.build()._toQuery()
-								)
-						)))
+				.withSort(s -> s
+						.field(field -> field
+							.field("positiveTags.count")
+							.order(SortOrder.Desc)
+							.nested(nested -> nested
+									.path("positiveTags")
+									.filter(QueryBuilders.knn()
+											.field("positiveTags.embedding")
+											.queryVector(TextEmbeddingUtil.embedding(tag))
+											.similarity(0.75f)
+											.numCandidates(5333L)
+											.build()._toQuery()
+									)
+							)
+						)
+				)
 				.withTrackScores(true)
 				.withSourceFilter(FetchSourceFilter.of(s -> s.withExcludes("*embedding*")))
 				.withPageable(pageable).build();

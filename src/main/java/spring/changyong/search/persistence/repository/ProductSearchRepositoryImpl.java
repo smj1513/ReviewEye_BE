@@ -113,7 +113,9 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 	@Override
 	public SearchHits<ProductDocument> searchSimilarityKeyword(String keyword, Pageable pageable) {
 		TagQueryBuilder builder = new TagQueryBuilder(keyword);
-		NativeQuery query = builder.addTagMatchQuery().addNestedKnnQuery().buildKnnQuery(pageable);
+		NativeQuery query = builder.addTagMatchQuery()
+				.addNestedKnnQuery()
+				.buildKnnQuery(pageable);
 
 		SearchHits<ProductDocument> searchHits = searchUtils.searchWithTimer(query, ProductDocument.class);
 		return searchHits;

@@ -32,7 +32,8 @@ public class NestedKnnQueryStrategy extends AbstractQueryStrategy {
 								)
 						)
 						.scoreMode(ChildScoreMode.Max)
-						.innerHits(in->in.sort(s->s.score(sc->sc.order(SortOrder.Desc))).source(s->s.filter(f->f.excludes("*embedding*"))))
+						.innerHits(in->in.sort(s->s.score(sc->sc.order(SortOrder.Desc)))
+								.source(s->s.filter(f->f.excludes("*embedding*"))))
 		);
 	}
 }

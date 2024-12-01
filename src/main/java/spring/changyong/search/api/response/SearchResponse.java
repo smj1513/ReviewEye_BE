@@ -84,6 +84,37 @@ public class SearchResponse {
 					.matchedTag(matchTagList.isEmpty() ? null : matchTagList.getFirst())
 					.build();
 		}
+
+		public static ProductResult fromVector(SearchHit<ProductDocument> searchHit) {
+			SearchHits<?> positiveTags = searchHit.getInnerHits("positiveTags");
+			List<String> keywordList = new ArrayList<>(searchHit.getContent()
+					.getPositiveTags()
+					.stream()
+					.map(Tag::getKeyword)
+					.toList()
+			);
+			List<String> matchTagList = new ArrayList<>();
+
+			if (positiveTags != null) {
+				positiveTags.forEach(hits -> {
+					Tag content = (Tag) hits.getContent();
+					matchTagList.add(content.getKeyword());
+				});
+				keywordList.removeAll(matchTagList);
+				matchTagList.forEach(keywordList::addFirst);
+			}
+			return ProductResult
+					.builder()
+					.name(searchHit.getContent().getName())
+					.imageUrl(searchHit.getContent().getThumbnail())
+					.price(searchHit.getContent().getPrice())
+					.discountPrice(searchHit.getContent().getDiscountPrice())
+					.id(searchHit.getContent().getProductId())
+					.score(searchHit.getScore())
+					.tags(keywordList.subList(0, 3).reversed())
+					.matchedTag(matchTagList.isEmpty() ? null : matchTagList.getFirst())
+					.build();
+		}
 	}
 
 	@Data

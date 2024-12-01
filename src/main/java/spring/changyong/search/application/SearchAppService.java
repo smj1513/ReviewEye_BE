@@ -104,7 +104,7 @@ public class SearchAppService {
 		SearchHits<ProductDocument> searchHits = productSearchRepository.searchSimilarityKeyword(keyword, pageRequest);
 		List<SearchResponse.ProductResult> productResultList = searchHits
 				.stream()
-				.map(SearchResponse.ProductResult::from)
+				.map(SearchResponse.ProductResult::fromVector)
 				.toList();
 
 		boolean hasNext = searchHits.getTotalHits() > (long) (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize();

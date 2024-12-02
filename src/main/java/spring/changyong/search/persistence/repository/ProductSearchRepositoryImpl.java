@@ -58,7 +58,7 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		NativeQuery query = builder
 				.addTermQuery()
 				.addMatchQuery()
-		//		.addMultiMatchQuery()
+				.addMultiMatchQuery()
 		//		.addMatchPhraseQuery()
 				.build(pageable);
 

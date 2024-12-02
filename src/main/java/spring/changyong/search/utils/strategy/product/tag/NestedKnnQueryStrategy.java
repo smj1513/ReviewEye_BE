@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.ChildScoreMode;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import org.springframework.beans.factory.annotation.Value;
 import spring.changyong.search.service.InferenceService;
 import spring.changyong.search.utils.TextEmbeddingUtil;
 import spring.changyong.search.utils.strategy.product.AbstractQueryStrategy;
@@ -12,6 +13,8 @@ import java.util.List;
 
 public class NestedKnnQueryStrategy extends AbstractQueryStrategy {
 
+	@Value("${min-similarity}")
+	private float minSimilarity;
 
 	public NestedKnnQueryStrategy(String keyword) {
 		super(keyword);

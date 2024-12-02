@@ -45,7 +45,7 @@ public class ProductAppService {
 		List<Tag> positiveTags = productDocument.getPositiveTags();
 		List<Tag> negativeTags = productDocument.getNegativeTags();
 		return ProductResponse.PositiveKeyword.builder()
-				.keywords(productDomainService.changeCountToPercentage(positiveTags))
+				.keywords(productDomainService.changeCountToPercentage(positiveTags, negativeTags))
 				.build();
 	}
 
@@ -54,7 +54,7 @@ public class ProductAppService {
 		List<Tag> negativeTags = productDocument.getNegativeTags();
 		List<Tag> positiveTags = productDocument.getPositiveTags();
 		return ProductResponse.NegativeKeyword.builder()
-				.keywords(productDomainService.changeCountToPercentage(negativeTags))
+				.keywords(productDomainService.changeCountToPercentage(negativeTags, positiveTags))
 				.build();
 	}
 

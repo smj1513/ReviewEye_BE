@@ -55,10 +55,11 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 	@Override
 	public SearchHits<ProductDocument> searchByName(String nameKeyword, Pageable pageable) {
 		ProductSearchQueryBuilder builder = new ProductSearchQueryBuilder(nameKeyword);
-		NativeQuery query = builder.addMatchPhraseQuery()
-				.addMatchQuery()
-				.addMultiMatchQuery()
+		NativeQuery query = builder
 				.addTermQuery()
+				.addMatchQuery()
+		//		.addMultiMatchQuery()
+		//		.addMatchPhraseQuery()
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);

@@ -58,8 +58,8 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 		NativeQuery query = builder
 				.addTermQuery()
 				.addMatchQuery()
-				.addMultiMatchQuery()
-		//		.addMatchPhraseQuery()
+				//.addMultiMatchQuery()
+				.addMatchPhraseQuery()
 				.build(pageable);
 
 		SearchHits<ProductDocument> result = searchUtils.searchWithTimer(query, ProductDocument.class);

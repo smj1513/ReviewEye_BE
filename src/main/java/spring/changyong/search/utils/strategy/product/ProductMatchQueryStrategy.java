@@ -21,7 +21,7 @@ public class ProductMatchQueryStrategy implements QueryStrategy {
 						.query(keyword)
 						.operator(Operator.And)
 						.analyzer("nori_analyzer")
-						.fuzziness("2").boost(0.5F).build()._toQuery()
+						.fuzziness("1").boost(0.5F).build()._toQuery()
 				)
 				.minimumShouldMatch("1")
 				.build()

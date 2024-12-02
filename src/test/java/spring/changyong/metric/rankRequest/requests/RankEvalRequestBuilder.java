@@ -22,9 +22,18 @@ public class RankEvalRequestBuilder {
 
 	public RankEvalRequest build(String query) {
 		return RankEvalRequest.of(request -> request.requests(requests -> requests
-				.id(query)
-				.request(rankEvalQueryStrategy.rankEvalQuery(query))
-				.ratings(GoldStandardDataSetLoader.getDocumentRatings(query)))
+						.id(query)
+						.request(rankEvalQueryStrategy.rankEvalQuery(query))
+						.ratings(GoldStandardDataSetLoader.getDocumentRatings(query)))
+				.metric(rankEvalStrategy.metric())
+		);
+	}
+
+	public RankEvalRequest buildVectors(String query) {
+		return RankEvalRequest.of(request -> request.requests(requests -> requests
+						.id(query)
+						.request(rankEvalQueryStrategy.rankEvalQuery(query))
+						.ratings(GoldStandardDataSetLoader.getVectorDocumentRating(query)))
 				.metric(rankEvalStrategy.metric())
 		);
 	}

@@ -14,5 +14,5 @@ logging:
   level:
     org:
       elasticsearch:
-        client: error
-    tracer: error
+        client: trace
+    tracer: trace

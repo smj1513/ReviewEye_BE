@@ -60,3 +60,5 @@ server:
 
 model:
   id: klue__bert-base
+
+min-similarity: 0.775f

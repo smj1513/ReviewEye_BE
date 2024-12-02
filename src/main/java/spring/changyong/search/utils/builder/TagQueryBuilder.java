@@ -22,6 +22,8 @@ import java.util.List;
 public class TagQueryBuilder {
 	private String tag;
 	private String name;
+	@Value("${min-similarity}")
+	private float minSimilarity;
 
 	private List<AbstractQueryStrategy> queryStrategies = new ArrayList<>();
 

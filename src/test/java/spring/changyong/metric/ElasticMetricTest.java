@@ -43,17 +43,11 @@ public class ElasticMetricTest {
 	@Test
 	void vectorMetric() throws IOException {
 		RankEvalRequest rankEvalRequest = RankEvalRequestProvider.knnSearchRequest(query1, new DcgStrategy());
-		RankEvalRequest rankEvalRequest1 = RankEvalRequestProvider.knnSearchRequest(query2, new DcgStrategy());
-		RankEvalRequest rankEvalRequest2 = RankEvalRequestProvider.knnSearchRequest(query3, new DcgStrategy());
 
 		RankEvalResponse rankEvalResponse = client.rankEval(rankEvalRequest);
-		RankEvalResponse rankEvalResponse1 = client.rankEval(rankEvalRequest1);
-		RankEvalResponse rankEvalResponse2 = client.rankEval(rankEvalRequest2);
 
 		System.out.println("=== Vector Search NDCG Metric Scores ===");
 		System.out.println("겨울철 토너 Search NDCG: " + rankEvalResponse.metricScore());
-		System.out.println("에센스 넉넉한 토너 패드 Search NDCG: " + rankEvalResponse1.metricScore());
-		System.out.println("건성 피부 로션 Search NDCG: " + rankEvalResponse2.metricScore());
 	}
 
 	@Test
@@ -76,16 +70,10 @@ public class ElasticMetricTest {
 	@Test
 	void vectorMRRMetric() throws IOException {
 		RankEvalRequest rankEvalRequest = RankEvalRequestProvider.knnSearchRequest(query1, new MrrStrategy());
-		RankEvalRequest rankEvalRequest1 = RankEvalRequestProvider.knnSearchRequest(query2, new MrrStrategy());
-		RankEvalRequest rankEvalRequest2 = RankEvalRequestProvider.knnSearchRequest(query3, new MrrStrategy());
 
 		RankEvalResponse rankEvalResponse = client.rankEval(rankEvalRequest);
-		RankEvalResponse rankEvalResponse1 = client.rankEval(rankEvalRequest1);
-		RankEvalResponse rankEvalResponse2 = client.rankEval(rankEvalRequest2);
 
 		System.out.println("=== Vector Search MRR Metric Scores ===");
 		System.out.println("겨울철 토너 Search MRR: " + rankEvalResponse.metricScore());
-		System.out.println("에센스 넉넉한 토너 패드 Search MRR: " + rankEvalResponse1.metricScore());
-		System.out.println("건성 피부 로션 Search MRR: " + rankEvalResponse2.metricScore());
 	}
 }

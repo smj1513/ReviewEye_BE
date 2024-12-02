@@ -19,7 +19,7 @@ public class RankEvalRequestProvider {
 		return rankEvalRequestBuilder
 				.addRankEvalStrategy(rankEvalStrategy)
 				.addRankEvalQueryStrategy(new KnnQueryStrategy())
-				.build(query);
+				.buildVectors(query);
 	}
 
 }

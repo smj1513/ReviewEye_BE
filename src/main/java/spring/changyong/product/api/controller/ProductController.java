@@ -7,26 +7,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.changyong.common.api.code.SuccessCode;
 import spring.changyong.common.api.response.CommonResponse;
+import spring.changyong.docs.controller.ProductDocsController;
 import spring.changyong.product.api.response.ProductResponse;
 import spring.changyong.product.application.ProductAppService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductController implements ProductDocsController {
 	private final ProductAppService productAppService;
 
 	@GetMapping("/{id}/detail")
-	public CommonResponse<ProductResponse.Detail> getProductDetail(@PathVariable Integer id) {
+	public CommonResponse<ProductResponse.Detail> getProductDetail(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getProductDetail(id));
 	}
 
-	@GetMapping("/{id}/positive-keyword")
-	public CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(@PathVariable Integer id) {
+	@GetMapping("/{id}/evaluation")
+	public CommonResponse<List<ProductResponse.Evaluation>> getProductEvaluation(@PathVariable String id) {
+		return CommonResponse.success(SuccessCode.OK, productAppService.getProductEvaluation(id));
+	}
+
+	@GetMapping("/{id}/positive-keywords")
+	public CommonResponse<ProductResponse.PositiveKeyword> getPositiveKeyword(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getPositiveKeyword(id));
 	}
-	@GetMapping("/{id}/negative-keyword")
-	public CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(@PathVariable Integer id) {
+	@GetMapping("/{id}/negative-keywords")
+	public CommonResponse<ProductResponse.NegativeKeyword> getNegativeKeyword(@PathVariable String id) {
 		return CommonResponse.success(SuccessCode.OK, productAppService.getNegativeKeyword(id));
 	}
 }

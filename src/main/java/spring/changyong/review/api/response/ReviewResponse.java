@@ -1,28 +1,42 @@
 package spring.changyong.review.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import spring.changyong.review.domain.model.Review;
+import spring.changyong.search.domain.model.ReviewDocument;
+
+import java.time.LocalDate;
 
 public class ReviewResponse {
 	@Data
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@Schema(title = "리뷰 조회 응답")
 	public static class Result {
-		private String nickname;
 		private Long id;
 		private String content;
-		private Double useFulPoint;
+		private String nickname;
+		private String userSkinInfo;
+		private String evaluation;
+		private Long star;
+		private Long recommend;
+		private LocalDate createdAt;
+		private boolean sentiment;
 
-		public static Result from(Review review){
+		public static Result from(ReviewDocument review) {
 			return Result.builder()
-					.id(review.getId().longValue())
-					.nickname(review.getNickname())
+					.id(review.getId())
 					.content(review.getReview())
-					.useFulPoint(review.getUsefulPoint())
+					.nickname(review.getNickname())
+					.userSkinInfo(review.getUserSkinInfo())
+					.evaluation(review.getEvaluation())
+					.star(review.getStar())
+					.recommend(review.getRecommend())
+					.createdAt(review.getDate())
+					.sentiment(review.isSentiment())
 					.build();
 		}
 	}

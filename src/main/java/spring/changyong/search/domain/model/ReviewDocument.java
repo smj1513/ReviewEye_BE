@@ -1,53 +1,57 @@
 package spring.changyong.search.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import spring.changyong.review.domain.model.Review;
+import org.springframework.data.elasticsearch.annotations.Setting;
+import spring.changyong.common.api.code.ErrorCode;
+import spring.changyong.common.exception.BusinessLogicException;
+import spring.changyong.search.SearchProperties;
 
+import java.time.LocalDate;
+import java.util.Map;
+
+@Document(indexName = "review")
+@Setting(settingPath = "elasticsearch/review-settings.json")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@Document(indexName = "review")
+@Builder
 public class ReviewDocument {
 
 	@Id
+	@Field(name = "id", type = FieldType.Long)
 	private Long id;
 
-	@Field(type = FieldType.Text)
-	private String nickname;
+	@Field(name = "product_id", type = FieldType.Keyword)
+	private String productId;
 
+	@Field(name = "review", type = FieldType.Text, analyzer = SearchProperties.NORI_ANALYZER)
 	private String review;
 
+	@Field(name = "star", type = FieldType.Long)
 	private Long star;
 
-	private String date;
-
-	private String userSkinInfo;
-
-	private String evaluation;
-
-	private String photo_list;
-
+	@Field(name = "recommend", type = FieldType.Long)
 	private Long recommend;
 
-	private Double usefulPoint;
+	@Field(name = "nickname", type = FieldType.Keyword)
+	private String nickname;
 
-	public static ReviewDocument from(Review review){
-		ReviewDocument reviewDocument = new ReviewDocument();
-		reviewDocument.setId(review.getId().longValue());
-		reviewDocument.setNickname(review.getNickname());
-		reviewDocument.setReview(review.getReview());
-		reviewDocument.setStar(review.getStar());
-		reviewDocument.setDate(review.getDate());
-		reviewDocument.setUserSkinInfo(review.getUserSkinInfo());
-		reviewDocument.setEvaluation(review.getEvaluation());
-		reviewDocument.setPhoto_list(review.getPhoto_list());
-		reviewDocument.setRecommend(review.getRecommend());
-		reviewDocument.setUsefulPoint(review.getUsefulPoint());
-		return reviewDocument;
-	}
+	@Field(name = "user_skin_info", type = FieldType.Text)
+	private String userSkinInfo;
+
+	@Field(name = "evaluation", type = FieldType.Text)
+	private String evaluation;
+
+	@Field(name = "sentiment", type = FieldType.Boolean)
+	@JsonProperty(value = "sentiment")
+	private boolean sentiment;
+
+	@Field(name = "date", type = FieldType.Date, pattern = "yyyy.MM.dd")
+	private LocalDate date;
 }

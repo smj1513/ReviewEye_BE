@@ -1,62 +1,69 @@
 package spring.changyong.search.domain.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import spring.changyong.product.domain.model.Product;
-import spring.changyong.review.domain.model.Review;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.*;
+import spring.changyong.search.SearchProperties;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Document(indexName = "product")
+@Setting(settingPath = "elasticsearch/product-settings.json")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDocument {
 
 	@Id
+	@Field(name = "id", type = FieldType.Long)
 	private Long id;
 
-	@Column(name = "product_id")
+	@JsonProperty("product_id")
+	@Field(name = "product_id", type = FieldType.Keyword)
 	private String productId;
 
+	@Field(type = FieldType.Text, analyzer = "n_gram_analyzer")
 	private String name;
 
+	@Field(type = FieldType.Text, analyzer = "standard")
+	private String title;
+
+	@Field(type = FieldType.Integer, name = "price")
 	private Integer price;
 
+	@JsonProperty("discount_price")
+	@Field(type = FieldType.Integer, name = "discount_price")
+	private Integer discountPrice;
+
+	@Field(type = FieldType.Keyword)
 	private String brand;
 
+	@Field(type = FieldType.Keyword)
 	private String category;
 
+	@Field(type = FieldType.Double)
 	private Double star;
 
+	@Field(type = FieldType.Keyword)
 	private String imageList;
 
+	@Field(type = FieldType.Keyword)
 	private String thumbnail;
 
 	@Field(type = FieldType.Nested)
-	private List<ReviewDocument> reviews;
+	@Builder.Default
+	private List<Tag> positiveTags = new ArrayList<>();
 
-	public static ProductDocument from(Product product){
-		ProductDocument productDocument = new ProductDocument();
-		productDocument.setId(product.getId().longValue());
-		productDocument.setProductId(product.getProductId());
-		productDocument.setName(product.getName());
-		productDocument.setPrice(product.getPrice());
-		productDocument.setBrand(product.getBrand());
-		productDocument.setCategory(product.getCategory());
-		productDocument.setStar(product.getStar());
-		productDocument.setImageList(product.getImageList());
-		productDocument.setThumbnail(product.getThumbnail());
-		Optional.ofNullable(product.getReviews())
-				.ifPresent(reviews ->
-						reviews.stream()
-								.map(ReviewDocument::from)
-								.forEach(productDocument.getReviews()::add)
-				);
-		return productDocument;
+
+	@Field(type = FieldType.Nested)
+	@Builder.Default
+	private List<Tag> negativeTags = new ArrayList<>();
+
+	public String toString(){
+		return "id:" + id + '\n' + "product_id:" + productId + "\n" + "name:" + name;
 	}
 }

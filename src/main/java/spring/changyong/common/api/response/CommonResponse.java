@@ -1,6 +1,7 @@
 package spring.changyong.common.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import spring.changyong.common.api.code.ErrorCode;
@@ -8,12 +9,21 @@ import spring.changyong.common.api.code.SuccessCode;
 
 @Data
 @Builder
+@Schema(title = "공통 응답 구조")
 public class CommonResponse<T> {
+
+
 	@JsonProperty("isSuccess")
+	@Schema(description = "성공 여부", example = "true")
 	private boolean isSuccess;
+
+	@Schema(description = "응답 코드", example = "200")
 	private Integer code;
+
+	@Schema(description = "응답 메시지", example = "성공")
 	private String message;
 
+	@Schema(description = "응답 데이터")
 	private T data;
 
 	public static <T> CommonResponse<T> success(SuccessCode successCode, T data) {

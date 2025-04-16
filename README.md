@@ -1,7 +1,9 @@
 # [ 리뷰 기반 상품 특징 분석 시스템 - 리뷰 아이 ]
 
 URL : https://revieweyes.ajb.kr/
+
 엘라스틱 서치 라이센스 문제로 현재 벡터 검색은 작동 x
+
 CI/CD : [![CICD](https://github.com/ReviewEye/ReviewEye_BE/actions/workflows/main.yml/badge.svg)](https://github.com/ReviewEye/ReviewEye_BE/actions/workflows/main.yml)
 #### 시스템 운용도
 ![image](https://github.com/user-attachments/assets/17e72bb2-0994-463d-ae98-a7f5a7adf42c)

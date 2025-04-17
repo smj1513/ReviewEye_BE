@@ -1,0 +1,21 @@
+crawling:
+  base-url: http://localhost:8020
+
+spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      url: localhost:9200
+      username: ${ELASTIC_SEARCH_USERNAME}
+      password: ${ELASTIC_SEARCH_PASSWORD}
+      ssl:
+        trust-store: trustStore.p12
+        trust-store-password: "000221"
+
+logging:
+  level:
+    org:
+      elasticsearch:
+        client: debug
+    tracer: debug

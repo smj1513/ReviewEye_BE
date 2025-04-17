@@ -13,7 +13,6 @@ import spring.changyong.search.domain.repository.ProductSearchRepository;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Disabled
 class CrawlingSchedulerTest {
 	@Autowired
 	ProductSearchRepository productSearchRepository;

@@ -23,7 +23,7 @@ public class ElasticMetricTest {
 	ElasticsearchClient client;
 
 	@Test
-	void normalMetric() throws IOException {
+		void normalMetric() throws IOException {
 		RankEvalRequest rankEvalRequest = RankEvalRequestProvider.nestedSearchRequest(query1, new DcgStrategy());
 		RankEvalRequest rankEvalRequest1 = RankEvalRequestProvider.nestedSearchRequest(query2, new DcgStrategy());
 		RankEvalRequest rankEvalRequest2 = RankEvalRequestProvider.nestedSearchRequest(query3, new DcgStrategy());

@@ -98,6 +98,14 @@ public class ProductSearchRepositoryImpl implements CustomProductSearchRepositor
 	}
 
 	@Override
+	public String findIdByProductId(String productId) {
+		NativeQuery query = NativeQuery.builder()
+				.withSourceFilter(FetchSourceFilter.of(s -> s.withIncludes("id")))
+				.withQuery(q -> q.term(t -> t.field("product_id").value(productId))).build();
+		return elasticsearchOperations.search(query, ProductDocument.class).getSearchHits().getFirst().getId();
+	}
+
+	@Override
 	public SearchHits<ProductDocument> searchAutoComplete(String keyword, Pageable pageable) {
 		ProductSearchQueryBuilder builder = new ProductSearchQueryBuilder(keyword);
 		NativeQuery query = builder.addMatchPhraseQuery()

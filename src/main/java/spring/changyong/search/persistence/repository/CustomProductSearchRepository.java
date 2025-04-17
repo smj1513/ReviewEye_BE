@@ -15,5 +15,5 @@ public interface CustomProductSearchRepository {
 	SearchHits<ProductDocument> searchAutoComplete(String keyword, Pageable pageable);
 	SearchHits<ProductDocument> searchSimilarityKeyword(String keyword, Pageable pageable);
 	Page<ProductDocument> searchWithSource(String[] source, Pageable pageable);
-
+	String findIdByProductId(String productId);
 }

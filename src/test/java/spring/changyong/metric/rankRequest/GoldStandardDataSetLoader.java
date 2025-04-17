@@ -2,7 +2,10 @@ package spring.changyong.metric.rankRequest;
 
 import co.elastic.clients.elasticsearch.core.rank_eval.DocumentRating;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import spring.changyong.search.domain.repository.ProductSearchRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,24 +13,30 @@ import java.util.Map;
 
 @Component
 public class GoldStandardDataSetLoader {
+
+	@Autowired
+	private ProductSearchRepository productSearchRepository;
+
 	private static Map<String, List<DocumentRating>> dataset;
 	private static Map<String, List<DocumentRating>> vectorDataset;
-	public GoldStandardDataSetLoader() {
+
+	@PostConstruct
+	private void dataLoader(){
 		dataset = new HashMap<>();
 		vectorDataset = new HashMap<>();
 		List<DocumentRating> documents1 = List.of( //겨울철 토너 레이팅
+				DocumentRating.of(document -> document.id("338").index("product").rating(3)),
 				DocumentRating.of(document -> document.id("6918").index("product").rating(3)),
-				DocumentRating.of(document -> document.id("41").index("product").rating(3)),
-				DocumentRating.of(document -> document.id("17").index("product").rating(3)),
+				DocumentRating.of(document -> document.id("295").index("product").rating(3)),
 
-				DocumentRating.of(document -> document.id("59").index("product").rating(2)),
+				DocumentRating.of(document -> document.id("152").index("product").rating(2)),
+				DocumentRating.of(document -> document.id("84").index("product").rating(2)),
 				DocumentRating.of(document -> document.id("216").index("product").rating(2)),
-				DocumentRating.of(document -> document.id("295").index("product").rating(1)),
+				DocumentRating.of(document -> document.id("177").index("product").rating(2)),
 
-				DocumentRating.of(document -> document.id("91").index("product").rating(2)),
-				DocumentRating.of(document -> document.id("329").index("product").rating(1)),
-				DocumentRating.of(document -> document.id("280").index("product").rating(1)),
-				DocumentRating.of(document -> document.id("1827").index("product").rating(3))
+				DocumentRating.of(document -> document.id("1827").index("product").rating(1)),
+				DocumentRating.of(document -> document.id("190").index("product").rating(1)),
+				DocumentRating.of(document -> document.id("41").index("product").rating(1))
 		);
 		List<DocumentRating> documents2 = List.of(
 				// 첫 번째 그룹: 상위 랭크 문서들
